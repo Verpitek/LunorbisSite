@@ -2,10 +2,31 @@
     import { onMount } from "svelte";
     import lunorbisLogo from "$lib/assets/lunorbis.svg";
     import MatrixBackground from "$lib/components/MatrixBackground.svelte";
-    import TVTurnOnEffect from "$lib/components/TVTurnOnEffect.svelte";
     import Glass from "$lib/components/Glass.svelte";
 
     let currentQuote = "";
+    let currentBlockIndex = 0;
+
+    const blocks = [
+        {
+            title: "LUNORBIS",
+            subtitle: "High-Performance Bedrock Server Runtime",
+            buttonPrimary: "Install Now!",
+            buttonSecondary: "Docs"
+        },
+        {
+            title: "FEATURES",
+            subtitle: "Lightning-fast performance and stability",
+            buttonPrimary: "Learn More",
+            buttonSecondary: "API Docs"
+        },
+        {
+            title: "COMMUNITY",
+            subtitle: "Join thousands of developers",
+            buttonPrimary: "Join Now",
+            buttonSecondary: "Discord"
+        }
+    ];
 
     const quotes = [
         // JavaScript Classics
@@ -123,47 +144,108 @@
         "Regex: write once, understand never!",
     ];
 
+    let glassPane: HTMLElement | null = null;
+    let rotateX = 0;
+    let rotateY = 0;
+
+    const nextBlock = () => {
+        currentBlockIndex = (currentBlockIndex + 1) % blocks.length;
+    };
+
+    const prevBlock = () => {
+        currentBlockIndex = (currentBlockIndex - 1 + blocks.length) % blocks.length;
+    };
+
     onMount(() => {
         currentQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        
+        glassPane = document.querySelector('.glass-pane');
+        if (!glassPane) return;
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!glassPane) return;
+            const rect = glassPane.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const distX = (e.clientX - centerX) / (rect.width / 2);
+            const distY = (e.clientY - centerY) / (rect.height / 2);
+            
+            rotateX = Math.max(-1, Math.min(1, distY)) * 8;
+            rotateY = Math.max(-1, Math.min(1, distX)) * -8;
+        };
+
+        const handleMouseLeave = () => {
+            rotateX = 0;
+            rotateY = 0;
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        glassPane.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            glassPane?.removeEventListener('mouseleave', handleMouseLeave);
+        };
     });
 </script>
 
 <div class="page terminal-theme">
-    <TVTurnOnEffect />
-
     <div class="moving-stripes"></div>
     <div class="crt-vignette"></div>
     <div class="scanlines"></div>
 
     <MatrixBackground count={25} />
 
-    <section class="hero" data-collision-box>
-            <div class="glass-pane">
-                <Glass />
-                
-                <div class="prism-edge"></div>
-    
-                <div class="glass-content">
-                    <div class="logo-container">
-                        <img src={lunorbisLogo} alt="Logo" class="logo" />
-                    </div>
-    
-                    <div class="title-wrapper">
-                        <h1 class="hero-title">LUNORBIS</h1>
-                        {#if currentQuote}
-                            <div class="splash-text">{currentQuote}</div>
-                        {/if}
-                    </div>
-    
-                    <p class="hero-subtitle">High-Performance Bedrock Server Runtime</p>
-    
-                    <div class="cta-buttons">
-                        <button class="cta-primary">Install Now!</button>
-                        <button class="cta-secondary">Docs</button>
+    <section class="hero carousel-section" data-collision-box>
+        <div class="carousel-container">
+            {#each blocks as block, index (index)}
+                <div class="carousel-block" class:active={index === currentBlockIndex}>
+                    <div class="glass-pane" style="transform: perspective(1200px) rotateX({index === currentBlockIndex ? rotateX : 0}deg) rotateY({index === currentBlockIndex ? rotateY : 0}deg); transition: transform 0.1s ease-out;">
+                        <Glass />
+                        
+                        <div class="prism-edge"></div>
+        
+                        <div class="glass-content">
+                            <div class="logo-container">
+                                <img src={lunorbisLogo} alt="Logo" class="logo" />
+                            </div>
+        
+                            <div class="title-wrapper">
+                                <h1 class="hero-title">{block.title}</h1>
+                                {#if currentQuote && index === 0}
+                                    <div class="splash-text">{currentQuote}</div>
+                                {/if}
+                            </div>
+        
+                            <p class="hero-subtitle">{block.subtitle}</p>
+        
+                            <div class="cta-buttons">
+                                <button class="cta-primary">{block.buttonPrimary}</button>
+                                <button class="cta-secondary">{block.buttonSecondary}</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            {/each}
+        </div>
+
+        <!-- Carousel Navigation -->
+        <button class="carousel-nav carousel-prev" on:click={prevBlock}>←</button>
+        <button class="carousel-nav carousel-next" on:click={nextBlock}>→</button>
+
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            {#each blocks as _, index}
+                <button 
+                    class="indicator" 
+                    class:active={index === currentBlockIndex}
+                    on:click={() => currentBlockIndex = index}
+                    aria-label="Go to block {index + 1}"
+                ></button>
+            {/each}
+        </div>
+    </section>
 </div>
 
 <style>
@@ -186,29 +268,7 @@
         width: 100%;
     }
 
-    .glass-pane {
-        position: relative;
-        /* We use a very low opacity background because the WebGL handles the "glass" look */
-        background: rgba(255, 255, 255, 0.01);
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px);
 
-        /* The border is crucial for the "Refraction" look */
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-top: 2px solid rgba(0, 255, 207, 0.3); /* Cyan highlight on top */
-
-        border-radius: 40px;
-        padding: 5rem 7rem;
-        overflow: hidden;
-        box-shadow:
-            0 50px 100px rgba(0, 0, 0, 0.9),
-            inset 0 0 80px rgba(0, 255, 207, 0.05); /* Internal glow */
-        max-width: 900px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
 
     /* This adds a rainbow "prism" effect to the edge of the glass */
     .prism-edge {
@@ -268,6 +328,113 @@
         padding: 1rem;
     }
 
+    .carousel-section {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .carousel-container {
+        display: flex;
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .carousel-block {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: 100%;
+        opacity: 0;
+        transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease-in-out;
+        pointer-events: none;
+    }
+
+    .carousel-block.active {
+        left: 0;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .carousel-block:nth-child(1).active {
+        left: 0;
+    }
+
+    .carousel-block:nth-child(2).active {
+        left: 0;
+    }
+
+    .carousel-block:nth-child(3).active {
+        left: 0;
+    }
+
+    /* Navigation buttons */
+    .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 30;
+        background: rgba(0, 255, 207, 0.2);
+        border: 2px solid rgba(0, 255, 207, 0.5);
+        color: var(--accent);
+        font-size: 1.5rem;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "Monocraft", monospace;
+        font-weight: bold;
+    }
+
+    .carousel-nav:hover {
+        background: rgba(0, 255, 207, 0.4);
+        border-color: var(--accent);
+        box-shadow: 0 0 20px rgba(0, 255, 207, 0.5);
+    }
+
+    .carousel-prev {
+        left: 2rem;
+    }
+
+    .carousel-next {
+        right: 2rem;
+    }
+
+    /* Carousel indicators */
+    .carousel-indicators {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 1rem;
+        z-index: 30;
+    }
+
+    .indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid rgba(0, 255, 207, 0.5);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+        background: var(--accent);
+        box-shadow: 0 0 15px rgba(0, 255, 207, 0.6);
+    }
+
+    .indicator:hover {
+        border-color: var(--accent);
+        box-shadow: 0 0 10px rgba(0, 255, 207, 0.3);
+    }
+
     .glass-pane {
         position: relative;
         background: rgba(255, 255, 255, 0.03);
@@ -279,12 +446,15 @@
         border-bottom: 1px solid rgba(0, 0, 0, 0.4);
         border-radius: 40px;
         padding: 5rem 7rem;
-        overflow: hidden;
+        overflow: visible;
         box-shadow:
             0 50px 100px rgba(0, 0, 0, 0.8),
             inset 0 0 40px rgba(255, 255, 255, 0.02);
         max-width: 900px;
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .reflection-glint {
@@ -416,6 +586,7 @@
         font-weight: bold;
         font-size: 1.1rem;
         cursor: pointer;
+        border-radius: 40px;
         transition:
             transform 0.2s,
             box-shadow 0.2s;
@@ -433,6 +604,7 @@
         padding: 1.1rem 2.5rem;
         font-family: "Monocraft";
         cursor: pointer;
+        border-radius: 40px;
     }
 
     /* --- TABLET OVERRIDES --- */
