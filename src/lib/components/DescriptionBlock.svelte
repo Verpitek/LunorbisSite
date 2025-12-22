@@ -1,8 +1,11 @@
 <script lang="ts">
+	import TypeWriter from './TypeWriter.svelte';
+	
 	export let title: string = '';
 	export let icon: string = '';
 	export let iconType: 'text' | 'image' = 'text';
 	export let isGlassmorphic: boolean = false;
+	export let enableTypeWriter: boolean = true;
 </script>
 
 <div class="description-block" class:glassmorphic={isGlassmorphic}>
@@ -20,13 +23,19 @@
 				</div>
 			{/if}
 
-			{#if title}
-				<h3 class="block-title">{title}</h3>
-			{/if}
+		{#if title}
+			<h3 class="block-title">
+				{#if enableTypeWriter}
+					<TypeWriter text={title} speed={50} delay={200} showCursor={false} />
+				{:else}
+					{title}
+				{/if}
+			</h3>
+		{/if}
 
-			<div class="content-text">
-				<slot />
-			</div>
+		<div class="content-text">
+			<slot />
+		</div>
 		</div>
 	</div>
 </div>

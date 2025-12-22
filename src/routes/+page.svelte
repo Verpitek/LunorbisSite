@@ -3,6 +3,7 @@
     import lunorbisLogo from "$lib/assets/lunorbis.svg";
     import MatrixBackground from "$lib/components/MatrixBackground.svelte";
     import Glass from "$lib/components/Glass.svelte";
+    import TypeWriter from "$lib/components/TypeWriter.svelte";
 
     let currentQuote = "";
 
@@ -135,71 +136,35 @@
     <MatrixBackground count={25} />
 
     <section class="hero" data-collision-box>
-        <div class="glass-pane">
-            <Glass />
-            
-            <div class="prism-edge"></div>
+         <div class="glass-pane">
+             <Glass />
+             
+             <div class="prism-edge"></div>
+             <div class="glass-glare"></div>
 
-            <div class="glass-content">
+             <div class="glass-content">
                 <div class="logo-container">
                     <img src={lunorbisLogo} alt="Logo" class="logo" />
                 </div>
 
                 <div class="title-wrapper">
-                    <h1 class="hero-title">LUNORBIS</h1>
+                    <h1 class="hero-title">
+                        <TypeWriter text="LUNORBIS" speed={80} delay={500} showCursor={false} />
+                    </h1>
                     {#if currentQuote}
-                        <div class="splash-text">{currentQuote}</div>
+                        <div class="splash-text">
+                            <TypeWriter text={currentQuote} speed={40} delay={500} showCursor={true} />
+                        </div>
                     {/if}
                 </div>
 
-                <p class="hero-subtitle">High-Performance Bedrock Server Runtime</p>
+                <p class="hero-subtitle">
+                    <TypeWriter text="High-Performance Bedrock Server Runtime" speed={50} delay={500} showCursor={false} />
+                </p>
 
                 <div class="cta-buttons">
                     <button class="cta-primary">Install Now!</button>
                     <button class="cta-secondary">Docs</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scroll Down Arrow -->
-        <div class="scroll-indicator">
-            <div class="pixel-arrow">
-                <div class="arrow-row row-1"></div>
-                <div class="arrow-row row-2"></div>
-                <div class="arrow-row row-3"></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="blocks-section">
-        <div class="blocks-grid">
-            <div class="block-card">
-                <div class="glass-pane">
-                    <Glass />
-                    <div class="prism-edge"></div>
-                    <div class="glass-content">
-                        <h2 class="block-title">FEATURES</h2>
-                        <p class="block-subtitle">Lightning-fast performance and stability</p>
-                        <div class="cta-buttons">
-                            <button class="cta-primary">Learn More</button>
-                            <button class="cta-secondary">API Docs</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="block-card">
-                <div class="glass-pane">
-                    <Glass />
-                    <div class="prism-edge"></div>
-                    <div class="glass-content">
-                        <h2 class="block-title">COMMUNITY</h2>
-                        <p class="block-subtitle">Join thousands of developers</p>
-                        <div class="cta-buttons">
-                            <button class="cta-primary">Join Now</button>
-                            <button class="cta-secondary">Discord</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -234,13 +199,7 @@
         inset: 0;
         pointer-events: none;
         border: 2px solid transparent;
-        background: linear-gradient(
-                135deg,
-                rgba(255, 0, 0, 0.1),
-                rgba(0, 255, 255, 0.1),
-                rgba(0, 0, 255, 0.1)
-            )
-            border-box;
+        background: none;
         -webkit-mask:
             linear-gradient(#fff 0 0) padding-box,
             linear-gradient(#fff 0 0);
@@ -250,6 +209,36 @@
         -webkit-mask-composite: destination-out;
         mask-composite: exclude;
         opacity: 0.5;
+    }
+
+    /* Glass glare stripe animation */
+    .glass-glare {
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.08) 45%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.08) 55%,
+            transparent
+        );
+        transform: skewX(-25deg);
+        pointer-events: none;
+        animation: glare-sweep 2.5s ease-in-out forwards;
+        animation-delay: 0.8s;
+    }
+
+    @keyframes glare-sweep {
+        0% {
+            left: -150%;
+        }
+        100% {
+            left: 150%;
+        }
     }
 
     .moving-stripes {
@@ -291,66 +280,9 @@
         left: 50%;
         transform: translateX(-50%);
         z-index: 20;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .pixel-arrow {
-        width: 30px;
-        height: 40px;
+        font-size: 2rem;
+        color: var(--accent);
         animation: bob 1.5s ease-in-out infinite;
-    }
-
-    .arrow-row {
-        width: 30px;
-        height: 10px;
-        margin: 0 auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .row-1 {
-        background: 
-            linear-gradient(90deg,
-                transparent 0px,
-                transparent 10px,
-                var(--accent) 10px,
-                var(--accent) 20px,
-                transparent 20px,
-                transparent 30px
-            );
-        background-size: 30px 10px;
-    }
-
-    .row-2 {
-        background: 
-            linear-gradient(90deg,
-                transparent 0px,
-                transparent 5px,
-                var(--accent) 5px,
-                var(--accent) 15px,
-                transparent 15px,
-                transparent 25px,
-                var(--accent) 25px,
-                var(--accent) 30px
-            );
-        background-size: 30px 10px;
-    }
-
-    .row-3 {
-        background: 
-            linear-gradient(90deg,
-                transparent 0px,
-                var(--accent) 0px,
-                var(--accent) 10px,
-                transparent 10px,
-                transparent 20px,
-                var(--accent) 20px,
-                var(--accent) 30px
-            );
-        background-size: 30px 10px;
     }
 
     .hero {
@@ -409,15 +341,33 @@
         border-bottom: 1px solid rgba(0, 0, 0, 0.4);
         border-radius: 40px;
         padding: 5rem 7rem;
-        overflow: visible;
+        overflow: hidden;
         box-shadow:
-            0 50px 100px rgba(0, 0, 0, 0.8),
+            /* Close shadow for depth */
+            0 20px 40px rgba(0, 0, 0, 0.4),
+            /* Medium shadow for realism */
+            0 40px 80px rgba(0, 0, 0, 0.6),
+            /* Far shadow for atmosphere */
+            0 80px 150px rgba(0, 0, 0, 0.7),
+            /* Inner depth */
             inset 0 0 40px rgba(255, 255, 255, 0.02);
         max-width: 900px;
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        animation: undissolve 3s ease-out forwards;
+    }
+
+    @keyframes undissolve {
+        0% {
+            opacity: 0;
+            filter: blur(20px);
+        }
+        100% {
+            opacity: 1;
+            filter: blur(0);
+        }
     }
 
     .reflection-glint {
