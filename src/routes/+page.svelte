@@ -160,6 +160,15 @@
                 </div>
             </div>
         </div>
+
+        <!-- Scroll Down Arrow -->
+        <div class="scroll-indicator">
+            <div class="pixel-arrow">
+                <div class="arrow-row row-1"></div>
+                <div class="arrow-row row-2"></div>
+                <div class="arrow-row row-3"></div>
+            </div>
+        </div>
     </section>
 
     <section class="blocks-section">
@@ -265,6 +274,83 @@
         to {
             background-position: 84.85px 84.85px;
         }
+    }
+
+    @keyframes bob {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    .scroll-indicator {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pixel-arrow {
+        width: 30px;
+        height: 40px;
+        animation: bob 1.5s ease-in-out infinite;
+    }
+
+    .arrow-row {
+        width: 30px;
+        height: 10px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .row-1 {
+        background: 
+            linear-gradient(90deg,
+                transparent 0px,
+                transparent 10px,
+                var(--accent) 10px,
+                var(--accent) 20px,
+                transparent 20px,
+                transparent 30px
+            );
+        background-size: 30px 10px;
+    }
+
+    .row-2 {
+        background: 
+            linear-gradient(90deg,
+                transparent 0px,
+                transparent 5px,
+                var(--accent) 5px,
+                var(--accent) 15px,
+                transparent 15px,
+                transparent 25px,
+                var(--accent) 25px,
+                var(--accent) 30px
+            );
+        background-size: 30px 10px;
+    }
+
+    .row-3 {
+        background: 
+            linear-gradient(90deg,
+                transparent 0px,
+                var(--accent) 0px,
+                var(--accent) 10px,
+                transparent 10px,
+                transparent 20px,
+                var(--accent) 20px,
+                var(--accent) 30px
+            );
+        background-size: 30px 10px;
     }
 
     .hero {
