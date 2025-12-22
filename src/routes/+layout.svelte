@@ -14,15 +14,15 @@
 			particle.className = 'particle';
 			particle.textContent = Math.random() > 0.5 ? '0' : '1';
 
-			const angle = (i / 12) * Math.PI * 2;
-			const velocity = 3 + Math.random() * 4;
+			const angle = (i / 12) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+			const velocity = 4 + Math.random() * 6;
 			const vx = Math.cos(angle) * velocity;
 			const vy = Math.sin(angle) * velocity;
-			const distance = 150 + Math.random() * 100;
-			const duration = 0.6 + Math.random() * 0.4;
-			const rotX = (Math.random() - 0.5) * 720;
-			const rotY = (Math.random() - 0.5) * 720;
-			const rotZ = (Math.random() - 0.5) * 720;
+			const distance = 200 + Math.random() * 150;
+			const duration = 0.8 + Math.random() * 0.6;
+			const rotX = (Math.random() - 0.5) * 1080;
+			const rotY = (Math.random() - 0.5) * 1080;
+			const rotZ = (Math.random() - 0.5) * 1080;
 
 			particle.style.setProperty('--vx', String(vx));
 			particle.style.setProperty('--vy', String(vy));
@@ -33,6 +33,7 @@
 			particle.style.setProperty('--rotZ', `${rotZ}deg`);
 			particle.style.left = x + 'px';
 			particle.style.top = y + 'px';
+			particle.style.pointerEvents = 'none';
 
 			document.body.appendChild(particle);
 
@@ -41,7 +42,7 @@
 	}
 
 	if (typeof window !== 'undefined') {
-		window.addEventListener('click', createParticleBurst);
+		window.addEventListener('mousedown', createParticleBurst);
 	}
 </script>
 
