@@ -133,7 +133,7 @@
 		<div class="scanlines"></div>
 	</div>
 
-	<MatrixBackground count={50} />
+	<MatrixBackground count={25} />
 
 	<main class="content">
 		<section class="hero">

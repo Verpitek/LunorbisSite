@@ -1,11 +1,20 @@
 <script lang="ts">
-	export let count: number = 50;
+	import { onMount } from 'svelte';
+
+	export let count: number = 25;
 
 	let matrixChars = '01';
 	const trailSegments = 10;
+	let displayChars: Map<number, string> = new Map();
 
 	function getRandom(min: number, max: number) {
 		return Math.random() * (max - min) + min;
+	}
+
+	function getRandomChar() {
+		return Math.random() < 0.05
+			? '2'
+			: matrixChars[Math.floor(Math.random() * matrixChars.length)];
 	}
 
 	function generateSnakeHead() {
@@ -19,12 +28,26 @@
 			scale: getRandom(0.7, 1.1),
 			rotation: getRandom(90, 360),
 			opacity: getRandom(0.2, 0.4),
-			char:
-				Math.random() < 0.05
-					? '2'
-					: matrixChars[Math.floor(Math.random() * matrixChars.length)]
+			char: getRandomChar()
 		};
 	}
+
+	onMount(() => {
+		// Initialize display chars
+		for (let i = 0; i < count; i++) {
+			displayChars.set(i, getRandomChar());
+		}
+		displayChars = displayChars;
+
+		// Change characters periodically
+		const interval = setInterval(() => {
+			const randomIndex = Math.floor(Math.random() * count);
+			displayChars.set(randomIndex, getRandomChar());
+			displayChars = displayChars;
+		}, 200);
+
+		return () => clearInterval(interval);
+	});
 </script>
 
 <div class="matrix-background">
@@ -46,7 +69,7 @@
 						--sc: {head.scale * (1 - j / (trailSegments * 2))};
 					"
 				>
-					{head.char}
+					{displayChars.get(i) || head.char}
 				</div>
 			{/each}
 		</div>

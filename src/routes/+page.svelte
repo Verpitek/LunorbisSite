@@ -73,7 +73,7 @@
     <div class="crt-vignette"></div>
     <div class="scanlines"></div>
 
-    <MatrixBackground count={50} />
+    <MatrixBackground count={25} />
 
     <section class="hero">
         <div class="glass-pane">
