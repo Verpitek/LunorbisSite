@@ -99,3 +99,7 @@ body::after {
 * {
 	box-sizing: border-box;
 }
+
+:global(.layout-main) {
+	margin-top: 70px;
+}

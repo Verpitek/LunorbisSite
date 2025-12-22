@@ -1,16 +1,22 @@
 <script lang="ts">
 	export let title: string = '';
 	export let icon: string = '';
+	export let iconType: 'text' | 'image' = 'text';
+	export let isGlassmorphic: boolean = false;
 </script>
 
-<div class="description-block">
-	<div class="glass-pane">
-		<div class="reflection-glint"></div>
+<div class="description-block" class:glassmorphic={isGlassmorphic}>
+	<div class="content-pane" class:glass={isGlassmorphic}>
+		<div class="reflection-glint" class:hidden={!isGlassmorphic}></div>
 
-		<div class="glass-content">
+		<div class="content-inner">
 			{#if icon}
 				<div class="icon-container">
-					<span class="icon">{icon}</span>
+					{#if iconType === 'image'}
+						<img src={icon} alt={title} class="icon-image" />
+					{:else}
+						<span class="icon-text">{icon}</span>
+					{/if}
 				</div>
 			{/if}
 
@@ -18,7 +24,7 @@
 				<h3 class="block-title">{title}</h3>
 			{/if}
 
-			<div class="description-content">
+			<div class="content-text">
 				<slot />
 			</div>
 		</div>
@@ -37,11 +43,9 @@
 		height: 100%;
 	}
 
-	.glass-pane {
+	.content-pane {
 		position: relative;
 		background: rgba(255, 255, 255, 0.03);
-		backdrop-filter: blur(35px) saturate(200%) contrast(90%);
-		-webkit-backdrop-filter: blur(35px) saturate(200%);
 		border-top: 2px solid rgba(255, 255, 255, 0.2);
 		border-left: 2px solid rgba(255, 255, 255, 0.15);
 		border-right: 1px solid rgba(0, 0, 0, 0.3);
@@ -58,12 +62,30 @@
 		flex-direction: column;
 	}
 
-	.glass-pane:hover {
+	.content-pane.glass {
+		background: rgba(255, 255, 255, 0.03);
+		backdrop-filter: blur(35px) saturate(200%) contrast(90%);
+		-webkit-backdrop-filter: blur(35px) saturate(200%);
+	}
+
+	.description-block:not(.glassmorphic) .content-pane {
+		background: rgba(60, 60, 70, 0.4);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+	}
+
+	.content-pane:hover {
 		background: rgba(255, 255, 255, 0.05);
 		box-shadow:
 			0 30px 70px rgba(0, 0, 0, 0.7),
 			inset 0 0 40px rgba(255, 255, 255, 0.03),
 			0 0 30px rgba(0, 255, 207, 0.1);
+	}
+
+	.description-block:not(.glassmorphic) .content-pane:hover {
+		background: rgba(70, 70, 80, 0.5);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 	}
 
 	.reflection-glint {
@@ -85,6 +107,10 @@
 		pointer-events: none;
 	}
 
+	.reflection-glint.hidden {
+		display: none;
+	}
+
 	@keyframes glint-sweep {
 		0% {
 			left: -150%;
@@ -97,7 +123,7 @@
 		}
 	}
 
-	.glass-content {
+	.content-inner {
 		position: relative;
 		z-index: 2;
 		display: flex;
@@ -112,11 +138,17 @@
 		margin-bottom: 0.5rem;
 	}
 
-	.icon {
+	.icon-text {
 		font-size: 2.5rem;
 		color: var(--accent);
 		text-shadow: 0 0 15px rgba(var(--accent-rgb), 0.6);
 		display: inline-block;
+	}
+
+	.icon-image {
+		width: 60px;
+		height: 60px;
+		object-fit: contain;
 	}
 
 	.block-title {
@@ -127,7 +159,7 @@
 		text-align: center;
 	}
 
-	.description-content {
+	.content-text {
 		color: #aaa;
 		font-size: 0.95rem;
 		line-height: 1.6;
@@ -135,13 +167,18 @@
 	}
 
 	@media (max-width: 768px) {
-		.glass-pane {
+		.content-pane {
 			padding: 1.5rem;
 			border-radius: 15px;
 		}
 
-		.icon {
+		.icon-text {
 			font-size: 2rem;
+		}
+
+		.icon-image {
+			width: 50px;
+			height: 50px;
 		}
 
 		.block-title {
@@ -149,7 +186,7 @@
 			letter-spacing: 1px;
 		}
 
-		.description-content {
+		.content-text {
 			font-size: 0.9rem;
 		}
 	}

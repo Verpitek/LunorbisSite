@@ -1,17 +1,23 @@
 <script lang="ts">
 	export let title: string = '';
 	export let icon: string = '';
+	export let iconType: 'text' | 'image' = 'text';
 	export let isHighlight: boolean = false;
+	export let isGlassmorphic: boolean = false;
 </script>
 
-<div class="information-block" class:highlight={isHighlight}>
-	<div class="glass-pane">
-		<div class="reflection-glint"></div>
+<div class="information-block" class:highlight={isHighlight} class:glassmorphic={isGlassmorphic}>
+	<div class="content-pane" class:glass={isGlassmorphic}>
+		<div class="reflection-glint" class:hidden={!isGlassmorphic}></div>
 
-		<div class="glass-content">
+		<div class="content-inner">
 			{#if icon}
 				<div class="icon-container">
-					<span class="icon">{icon}</span>
+					{#if iconType === 'image'}
+						<img src={icon} alt={title} class="icon-image" />
+					{:else}
+						<span class="icon-text">{icon}</span>
+					{/if}
 				</div>
 			{/if}
 
@@ -19,7 +25,7 @@
 				<h3 class="info-title">{title}</h3>
 			{/if}
 
-			<div class="info-content">
+			<div class="content-text">
 				<slot />
 			</div>
 		</div>
@@ -39,11 +45,9 @@
 		height: 100%;
 	}
 
-	.glass-pane {
+	.content-pane {
 		position: relative;
 		background: rgba(255, 255, 255, 0.03);
-		backdrop-filter: blur(35px) saturate(200%) contrast(90%);
-		-webkit-backdrop-filter: blur(35px) saturate(200%);
 		border-top: 2px solid rgba(255, 255, 255, 0.2);
 		border-left: 2px solid rgba(255, 255, 255, 0.15);
 		border-right: 1px solid rgba(0, 0, 0, 0.3);
@@ -60,15 +64,20 @@
 		flex-direction: column;
 	}
 
-	.glass-pane:hover {
-		background: rgba(255, 255, 255, 0.05);
-		box-shadow:
-			0 30px 70px rgba(0, 0, 0, 0.7),
-			inset 0 0 40px rgba(255, 255, 255, 0.03),
-			0 0 30px rgba(0, 255, 207, 0.1);
+	.content-pane.glass {
+		background: rgba(255, 255, 255, 0.03);
+		backdrop-filter: blur(35px) saturate(200%) contrast(90%);
+		-webkit-backdrop-filter: blur(35px) saturate(200%);
 	}
 
-	.highlight .glass-pane {
+	.information-block:not(.glassmorphic) .content-pane {
+		background: rgba(60, 60, 70, 0.4);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+	}
+
+	.highlight .content-pane {
 		background: rgba(255, 255, 0, 0.02);
 		border-top: 2px solid rgba(255, 255, 0, 0.3);
 		border-left: 2px solid rgba(255, 255, 0, 0.25);
@@ -78,20 +87,28 @@
 			0 0 20px rgba(255, 255, 0, 0.15);
 	}
 
-	.highlight .glass-pane:hover {
+	.information-block:not(.glassmorphic).highlight .content-pane {
+		background: rgba(70, 70, 40, 0.4);
+	}
+
+	.content-pane:hover {
+		background: rgba(255, 255, 255, 0.05);
+		box-shadow:
+			0 30px 70px rgba(0, 0, 0, 0.7),
+			inset 0 0 40px rgba(255, 255, 255, 0.03),
+			0 0 30px rgba(0, 255, 207, 0.1);
+	}
+
+	.information-block:not(.glassmorphic) .content-pane:hover {
+		background: rgba(70, 70, 80, 0.5);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+	}
+
+	.highlight .content-pane:hover {
 		box-shadow:
 			0 30px 70px rgba(0, 0, 0, 0.7),
 			inset 0 0 40px rgba(255, 255, 0, 0.03),
 			0 0 40px rgba(255, 255, 0, 0.25);
-	}
-
-	.highlight .icon {
-		color: var(--minecraft-yellow);
-		text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
-	}
-
-	.highlight .info-title {
-		color: var(--minecraft-yellow);
 	}
 
 	.reflection-glint {
@@ -113,6 +130,10 @@
 		pointer-events: none;
 	}
 
+	.reflection-glint.hidden {
+		display: none;
+	}
+
 	@keyframes glint-sweep {
 		0% {
 			left: -150%;
@@ -125,7 +146,7 @@
 		}
 	}
 
-	.glass-content {
+	.content-inner {
 		position: relative;
 		z-index: 2;
 		display: flex;
@@ -140,11 +161,22 @@
 		margin-bottom: 0.25rem;
 	}
 
-	.icon {
+	.icon-text {
 		font-size: 2.2rem;
 		color: var(--accent);
 		text-shadow: 0 0 15px rgba(var(--accent-rgb), 0.6);
 		display: inline-block;
+	}
+
+	.icon-image {
+		width: 50px;
+		height: 50px;
+		object-fit: contain;
+	}
+
+	.highlight .icon-text {
+		color: var(--minecraft-yellow);
+		text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
 	}
 
 	.info-title {
@@ -155,7 +187,11 @@
 		text-align: center;
 	}
 
-	.info-content {
+	.highlight .info-title {
+		color: var(--minecraft-yellow);
+	}
+
+	.content-text {
 		color: #999;
 		font-size: 0.9rem;
 		line-height: 1.5;
@@ -163,13 +199,18 @@
 	}
 
 	@media (max-width: 768px) {
-		.glass-pane {
+		.content-pane {
 			padding: 1.25rem;
 			border-radius: 15px;
 		}
 
-		.icon {
+		.icon-text {
 			font-size: 1.8rem;
+		}
+
+		.icon-image {
+			width: 40px;
+			height: 40px;
 		}
 
 		.info-title {
@@ -177,7 +218,7 @@
 			letter-spacing: 0.5px;
 		}
 
-		.info-content {
+		.content-text {
 			font-size: 0.85rem;
 		}
 	}

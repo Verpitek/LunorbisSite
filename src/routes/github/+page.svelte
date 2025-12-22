@@ -1,7 +1,4 @@
 <script lang="ts">
-	import DescriptionBlock from '$lib/components/DescriptionBlock.svelte';
-	import Footer from '$lib/components/Footer.svelte';
-
 	interface Repository {
 		name: string;
 		description: string;
@@ -86,10 +83,8 @@
 	</div>
 
 	<main class="content">
-		<!-- Hero Section -->
 		<section class="hero">
 			<div class="hero-content">
-				<div class="hero-icon">🐙</div>
 				<h1 class="page-title">Open Source on GitHub</h1>
 				<p class="page-subtitle">
 					Lunorbis is proudly open-source. Explore our repositories, contribute to the
@@ -98,50 +93,19 @@
 			</div>
 		</section>
 
-		<!-- GitHub Stats Section -->
-		<section class="stats-section">
-			<div class="stats-grid">
-				<div class="stat-card">
-					<DescriptionBlock icon="⭐" title="Stars">
-						<span class="stat-number">8,113</span>
-					</DescriptionBlock>
-				</div>
-				<div class="stat-card">
-					<DescriptionBlock icon="🍴" title="Forks">
-						<span class="stat-number">1,247</span>
-					</DescriptionBlock>
-				</div>
-				<div class="stat-card">
-					<DescriptionBlock icon="👥" title="Contributors">
-						<span class="stat-number">156</span>
-					</DescriptionBlock>
-				</div>
-				<div class="stat-card">
-					<DescriptionBlock icon="📦" title="Repositories">
-						<span class="stat-number">12</span>
-					</DescriptionBlock>
-				</div>
-			</div>
-		</section>
-
-		<!-- Repositories Section -->
 		<section class="repos-section">
-			<h2 class="section-title">Featured Repositories</h2>
 			<div class="repos-container">
 				{#each repositories as repo (repo.name)}
 					<a href={repo.url} target="_blank" rel="noopener noreferrer" class="repo-card">
 						<div class="repo-header">
-							<h3 class="repo-name">
-								<span class="repo-icon">📂</span>
-								{repo.name}
-							</h3>
+							<h3 class="repo-name">{repo.name}</h3>
 							<div class="repo-meta">
 								<span class="language-badge" style="color: {getLanguageColor(repo.language)}">
 									<span class="language-dot"></span>
 									{repo.language}
 								</span>
 								<span class="stars-badge">
-									⭐ {repo.stars.toLocaleString()}
+									Stars: {repo.stars.toLocaleString()}
 								</span>
 							</div>
 						</div>
@@ -158,69 +122,51 @@
 			</div>
 		</section>
 
-		<!-- Contributing Section -->
 		<section class="contributing-section">
-			<h2 class="section-title">Contribute to Lunorbis</h2>
-			<div class="contribute-grid">
-				<div class="contribute-card">
-					<DescriptionBlock icon="🐛" title="Report Bugs">
-						Found an issue? Help us improve by reporting bugs and edge cases to our issue
-						tracker
-					</DescriptionBlock>
-				</div>
-				<div class="contribute-card">
-					<DescriptionBlock icon="✨" title="Suggest Features">
-						Have an idea to make Lunorbis better? Share your feature requests and
-						suggestions
-					</DescriptionBlock>
-				</div>
-				<div class="contribute-card">
-					<DescriptionBlock icon="💻" title="Submit PRs">
-						Contribute code improvements, documentation, or new features through pull
-						requests
-					</DescriptionBlock>
-				</div>
-				<div class="contribute-card">
-					<DescriptionBlock icon="📚" title="Write Docs">
-						Help us document features, write tutorials, and improve our knowledge base
-					</DescriptionBlock>
-				</div>
-			</div>
-
 			<div class="contributing-box">
-				<h3>Getting Started with Contributions</h3>
-				<ol class="contribution-steps">
-					<li>Fork the repository you want to contribute to</li>
-					<li>Create a new branch for your changes</li>
-					<li>Make your improvements or fixes</li>
-					<li>Write clear commit messages and tests</li>
-					<li>Submit a pull request with a detailed description</li>
-					<li>Review feedback and iterate with maintainers</li>
-				</ol>
-				<a href="https://github.com/lunorbis/lunorbis-core/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="contributing-link">
-					View Full Contributing Guide →
+				<h2>Contributing to Lunorbis</h2>
+				<p>We welcome contributions from the community. Here are some ways you can help:</p>
+				<ul class="contribution-ways">
+					<li>Report bugs and issues</li>
+					<li>Suggest new features and improvements</li>
+					<li>Submit code improvements and fixes</li>
+					<li>Write documentation and tutorials</li>
+				</ul>
+				<a
+					href="https://github.com/lunorbis/lunorbis-core/blob/main/CONTRIBUTING.md"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="contributing-link"
+				>
+					View Contributing Guide
 				</a>
 			</div>
 		</section>
 
-		<!-- CTA Section -->
 		<section class="cta-section">
 			<div class="cta-box">
-				<h2>Join Our Community</h2>
-				<p>Star us on GitHub, discuss with fellow developers, and help shape the future</p>
+				<h2>Join Us on GitHub</h2>
 				<div class="cta-buttons">
-					<a href="https://github.com/lunorbis" target="_blank" rel="noopener noreferrer" class="cta-button primary">
-						Visit GitHub
+					<a
+						href="https://github.com/lunorbis"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="cta-button primary"
+					>
+						Visit Organization
 					</a>
-					<a href="https://github.com/lunorbis/lunorbis-core" target="_blank" rel="noopener noreferrer" class="cta-button secondary">
+					<a
+						href="https://github.com/lunorbis/lunorbis-core"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="cta-button secondary"
+					>
 						View Main Repo
 					</a>
 				</div>
 			</div>
 		</section>
 	</main>
-
-	<Footer />
 </div>
 
 <style>
@@ -296,21 +242,15 @@
 	}
 
 	.hero {
-		min-height: 40vh;
+		min-height: 30vh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 4rem;
+		margin-bottom: 3rem;
 	}
 
 	.hero-content {
 		text-align: center;
-	}
-
-	.hero-icon {
-		font-size: 4rem;
-		margin-bottom: 1rem;
-		display: inline-block;
 	}
 
 	.page-title {
@@ -329,34 +269,6 @@
 		line-height: 1.6;
 	}
 
-	.section-title {
-		text-align: center;
-		font-size: 2rem;
-		color: var(--accent);
-		margin-bottom: 3rem;
-		letter-spacing: 2px;
-	}
-
-	.stats-section {
-		margin-bottom: 5rem;
-	}
-
-	.stats-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 2rem;
-	}
-
-	.stat-card {
-		min-height: 180px;
-	}
-
-	.stat-number {
-		font-size: 2.5rem;
-		color: var(--accent);
-		font-weight: bold;
-	}
-
 	.repos-section {
 		margin-bottom: 5rem;
 	}
@@ -368,8 +280,7 @@
 	}
 
 	.repo-card {
-		background: rgba(255, 255, 255, 0.02);
-		backdrop-filter: blur(10px);
+		background: rgba(60, 60, 70, 0.4);
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: 15px;
 		padding: 1.5rem;
@@ -383,9 +294,9 @@
 	}
 
 	.repo-card:hover {
-		background: rgba(255, 255, 255, 0.05);
+		background: rgba(70, 70, 80, 0.5);
 		border-color: rgba(0, 255, 207, 0.2);
-		box-shadow: 0 0 30px rgba(0, 255, 207, 0.1);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 		transform: translateY(-3px);
 	}
 
@@ -398,14 +309,6 @@
 		margin: 0 0 0.5rem 0;
 		color: var(--accent);
 		font-size: 1.2rem;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.repo-icon {
-		display: inline-block;
-		font-size: 1.3rem;
 	}
 
 	.repo-meta {
@@ -465,44 +368,49 @@
 	}
 
 	.contributing-section {
-		margin-bottom: 5rem;
-	}
-
-	.contribute-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 2rem;
-		margin-bottom: 3rem;
-	}
-
-	.contribute-card {
-		min-height: 250px;
+		margin-bottom: 4rem;
 	}
 
 	.contributing-box {
-		background: linear-gradient(135deg, rgba(0, 255, 207, 0.05), rgba(0, 255, 207, 0.02));
+		background: rgba(255, 255, 255, 0.03);
+		backdrop-filter: blur(20px) saturate(180%) contrast(70%);
+		-webkit-backdrop-filter: blur(20px) saturate(180%);
 		border: 1px solid rgba(0, 255, 207, 0.2);
 		border-radius: 15px;
 		padding: 2rem;
-		backdrop-filter: blur(10px);
 	}
 
-	.contributing-box h3 {
-		margin: 0 0 1.5rem 0;
+	.contributing-box h2 {
+		margin: 0 0 1rem 0;
 		color: var(--accent);
 		font-size: 1.5rem;
 		letter-spacing: 1px;
 	}
 
-	.contribution-steps {
+	.contributing-box p {
+		color: #999;
 		margin: 0 0 1.5rem 0;
-		padding-left: 1.5rem;
+	}
+
+	.contribution-ways {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 1.5rem 0;
 		color: #999;
 		line-height: 1.8;
 	}
 
-	.contribution-steps li {
-		margin-bottom: 0.8rem;
+	.contribution-ways li {
+		padding-left: 1.5rem;
+		position: relative;
+	}
+
+	.contribution-ways li:before {
+		content: '>';
+		position: absolute;
+		left: 0;
+		color: var(--accent);
+		font-weight: bold;
 	}
 
 	.contributing-link {
@@ -522,25 +430,20 @@
 	}
 
 	.cta-box {
-		background: linear-gradient(135deg, rgba(0, 255, 207, 0.08), rgba(0, 255, 207, 0.02));
-		border: 2px solid rgba(0, 255, 207, 0.2);
+		background: rgba(255, 255, 255, 0.03);
+		backdrop-filter: blur(20px) saturate(180%) contrast(70%);
+		-webkit-backdrop-filter: blur(20px) saturate(180%);
+		border: 1px solid rgba(0, 255, 207, 0.2);
 		border-radius: 20px;
 		padding: 3rem;
 		text-align: center;
-		backdrop-filter: blur(10px);
 	}
 
 	.cta-box h2 {
-		margin: 0 0 1rem 0;
+		margin: 0 0 2rem 0;
 		color: var(--accent);
 		font-size: 2rem;
 		letter-spacing: 2px;
-	}
-
-	.cta-box p {
-		margin: 0 0 2rem 0;
-		color: #999;
-		font-size: 1.1rem;
 	}
 
 	.cta-buttons {
@@ -591,19 +494,10 @@
 
 		.hero {
 			margin-bottom: 2rem;
-			min-height: 30vh;
-		}
-
-		.stats-grid {
-			grid-template-columns: repeat(2, 1fr);
-			gap: 1rem;
+			min-height: 25vh;
 		}
 
 		.repos-container {
-			grid-template-columns: 1fr;
-		}
-
-		.contribute-grid {
 			grid-template-columns: 1fr;
 		}
 

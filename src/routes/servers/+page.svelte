@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import InformationBlock from '$lib/components/InformationBlock.svelte';
-	import Footer from '$lib/components/Footer.svelte';
 
 	interface Server {
 		id: string;
@@ -12,14 +12,14 @@
 		status: 'online' | 'offline';
 	}
 
-	const servers: Server[] = [
+	const allServers: Server[] = [
 		{
 			id: '1',
 			name: 'Creative Server',
 			description: 'Build anything your imagination allows with unlimited resources',
 			players: 124,
 			maxPlayers: 200,
-			icon: '🎨',
+			icon: '',
 			status: 'online'
 		},
 		{
@@ -28,7 +28,7 @@
 			description: 'Classic survival experience with custom plugins and modifications',
 			players: 87,
 			maxPlayers: 150,
-			icon: '⛏️',
+			icon: '',
 			status: 'online'
 		},
 		{
@@ -37,7 +37,7 @@
 			description: 'Competitive player-versus-player combat on custom maps',
 			players: 45,
 			maxPlayers: 100,
-			icon: '⚔️',
+			icon: '',
 			status: 'online'
 		},
 		{
@@ -46,7 +46,7 @@
 			description: 'Survive on islands floating in the sky with limited resources',
 			players: 92,
 			maxPlayers: 175,
-			icon: '☁️',
+			icon: '',
 			status: 'online'
 		},
 		{
@@ -55,7 +55,7 @@
 			description: 'Test your skills in challenging parkour courses and obstacles',
 			players: 28,
 			maxPlayers: 80,
-			icon: '🏃',
+			icon: '',
 			status: 'offline'
 		},
 		{
@@ -64,10 +64,60 @@
 			description: 'Fast-paced mini-games with friends and players worldwide',
 			players: 156,
 			maxPlayers: 250,
-			icon: '🎮',
+			icon: '',
 			status: 'online'
+		},
+		{
+			id: '7',
+			name: 'Adventure World',
+			description: 'Epic story-driven adventure with quests and dungeons',
+			players: 67,
+			maxPlayers: 120,
+			icon: '',
+			status: 'online'
+		},
+		{
+			id: '8',
+			name: 'Roleplay Server',
+			description: 'Immersive roleplay experience with custom economy and jobs',
+			players: 102,
+			maxPlayers: 180,
+			icon: '',
+			status: 'online'
+		},
+		{
+			id: '9',
+			name: 'Prison Break',
+			description: 'Escape from prison and earn your freedom through missions',
+			players: 34,
+			maxPlayers: 100,
+			icon: '',
+			status: 'offline'
 		}
 	];
+
+	let currentPage = $state(1);
+	const serversPerPage = 6;
+
+	let paginatedServers = $derived(
+		allServers.slice(
+			(currentPage - 1) * serversPerPage,
+			currentPage * serversPerPage
+		)
+	);
+
+	let totalPages = $derived(Math.ceil(allServers.length / serversPerPage));
+
+	function goToPage(page: number) {
+		if (page >= 1 && page <= totalPages) {
+			currentPage = page;
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+	}
+
+	onMount(() => {
+		currentPage = 1;
+	});
 </script>
 
 <svelte:head>
@@ -83,7 +133,6 @@
 	</div>
 
 	<main class="content">
-		<!-- Hero Section -->
 		<section class="hero">
 			<div class="hero-content">
 				<h1 class="page-title">Server Network</h1>
@@ -94,12 +143,11 @@
 			</div>
 		</section>
 
-		<!-- Servers Grid -->
 		<section class="servers-section">
 			<div class="servers-container">
-				{#each servers as server (server.id)}
+				{#each paginatedServers as server (server.id)}
 					<div class="server-card">
-						<InformationBlock title={server.name} icon={server.icon}>
+						<InformationBlock title={server.name} icon={server.icon} iconType="image">
 							<p>{server.description}</p>
 							<div class="server-stats">
 								<div class="stat">
@@ -109,7 +157,7 @@
 								<div class="stat">
 									<span class="stat-label">Status</span>
 									<span class="stat-value" class:offline={server.status === 'offline'}>
-										{server.status === 'online' ? '🟢 Online' : '🔴 Offline'}
+										{server.status === 'online' ? '[ONLINE]' : '[OFFLINE]'}
 									</span>
 								</div>
 							</div>
@@ -120,32 +168,39 @@
 					</div>
 				{/each}
 			</div>
-		</section>
 
-		<!-- Info Section -->
-		<section class="info-section">
-			<h2 class="section-title">Why Choose Lunorbis Servers?</h2>
-			<div class="info-grid">
-				<div class="info-item">
-					<div class="info-icon">⚡</div>
-					<h3>High Performance</h3>
-					<p>V8 JIT compilation ensures blazing-fast script execution</p>
+			{#if totalPages > 1}
+				<div class="pagination">
+					<button
+						class="pagination-btn"
+						disabled={currentPage === 1}
+						onclick={() => goToPage(currentPage - 1)}
+					>
+						Previous
+					</button>
+
+					{#each Array(totalPages) as _, i}
+						{@const pageNum = i + 1}
+						<button
+							class="pagination-btn"
+							class:active={currentPage === pageNum}
+							onclick={() => goToPage(pageNum)}
+						>
+							{pageNum}
+						</button>
+					{/each}
+
+					<button
+						class="pagination-btn"
+						disabled={currentPage === totalPages}
+						onclick={() => goToPage(currentPage + 1)}
+					>
+						Next
+					</button>
 				</div>
-				<div class="info-item">
-					<div class="info-icon">🔌</div>
-					<h3>Extended API</h3>
-					<p>Access filesystem operations and external networking capabilities</p>
-				</div>
-				<div class="info-item">
-					<div class="info-icon">🛡️</div>
-					<h3>Reliable</h3>
-					<p>Enterprise-grade stability with 99.9% uptime guarantee</p>
-				</div>
-			</div>
+			{/if}
 		</section>
 	</main>
-
-	<Footer />
 </div>
 
 <style>
@@ -221,11 +276,11 @@
 	}
 
 	.hero {
-		min-height: 40vh;
+		min-height: 30vh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 4rem;
+		margin-bottom: 3rem;
 	}
 
 	.hero-content {
@@ -249,13 +304,14 @@
 	}
 
 	.servers-section {
-		margin-bottom: 5rem;
+		margin-bottom: 4rem;
 	}
 
 	.servers-container {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 		gap: 2rem;
+		margin-bottom: 3rem;
 	}
 
 	.server-card {
@@ -315,56 +371,41 @@
 		box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.5);
 	}
 
-	.info-section {
-		margin-bottom: 3rem;
+	.pagination {
+		display: flex;
+		justify-content: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		margin-top: 3rem;
 	}
 
-	.section-title {
-		text-align: center;
-		font-size: 2rem;
-		color: var(--accent);
-		margin-bottom: 3rem;
-		letter-spacing: 2px;
-	}
-
-	.info-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 2rem;
-	}
-
-	.info-item {
-		text-align: center;
-		padding: 2rem;
-		background: rgba(255, 255, 255, 0.02);
-		backdrop-filter: blur(10px);
-		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 15px;
-		transition: all 0.3s ease;
-	}
-
-	.info-item:hover {
-		background: rgba(255, 255, 255, 0.05);
-		border-color: rgba(0, 255, 207, 0.2);
-		box-shadow: 0 0 20px rgba(0, 255, 207, 0.1);
-	}
-
-	.info-icon {
-		font-size: 2.5rem;
-		margin-bottom: 1rem;
-		display: inline-block;
-	}
-
-	.info-item h3 {
-		margin: 0 0 0.5rem 0;
-		color: var(--accent);
-		font-size: 1.2rem;
-	}
-
-	.info-item p {
-		margin: 0;
+	.pagination-btn {
+		padding: 0.6rem 1rem;
+		background: rgba(60, 60, 70, 0.4);
 		color: #999;
-		font-size: 0.95rem;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 8px;
+		font-family: 'Monocraft', monospace;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		font-size: 0.9rem;
+	}
+
+	.pagination-btn:hover:not(:disabled) {
+		background: rgba(70, 70, 80, 0.5);
+		color: var(--accent);
+		border-color: rgba(0, 255, 207, 0.3);
+	}
+
+	.pagination-btn.active {
+		background: var(--accent);
+		color: #000;
+		border-color: var(--accent);
+	}
+
+	.pagination-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 
 	@media (max-width: 768px) {
@@ -374,14 +415,10 @@
 
 		.hero {
 			margin-bottom: 2rem;
-			min-height: 30vh;
+			min-height: 25vh;
 		}
 
 		.servers-container {
-			grid-template-columns: 1fr;
-		}
-
-		.info-grid {
 			grid-template-columns: 1fr;
 		}
 	}

@@ -1,6 +1,5 @@
 <script lang="ts">
-	import DescriptionBlock from '$lib/components/DescriptionBlock.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import { onMount } from 'svelte';
 
 	interface AddOn {
 		id: string;
@@ -13,15 +12,15 @@
 		category: string;
 	}
 
-	const addons: AddOn[] = [
+	const allAddons: AddOn[] = [
 		{
 			id: '1',
 			name: 'Custom Chat System',
-			description: 'Advanced chat with colored messages, emojis, and custom formatting',
+			description: 'Advanced chat with colored messages and custom formatting',
 			author: 'Lunorbis Team',
 			downloads: 2543,
 			rating: 4.8,
-			icon: '💬',
+			icon: '',
 			category: 'Chat'
 		},
 		{
@@ -31,7 +30,7 @@
 			author: 'Community Dev',
 			downloads: 1876,
 			rating: 4.6,
-			icon: '💰',
+			icon: '',
 			category: 'Economy'
 		},
 		{
@@ -41,7 +40,7 @@
 			author: 'Lunorbis Team',
 			downloads: 3124,
 			rating: 4.9,
-			icon: '🌍',
+			icon: '',
 			category: 'Teleport'
 		},
 		{
@@ -51,7 +50,7 @@
 			author: 'Creator Hub',
 			downloads: 956,
 			rating: 4.5,
-			icon: '📜',
+			icon: '',
 			category: 'Gameplay'
 		},
 		{
@@ -61,7 +60,7 @@
 			author: 'Lunorbis Team',
 			downloads: 2187,
 			rating: 4.7,
-			icon: '🔨',
+			icon: '',
 			category: 'Crafting'
 		},
 		{
@@ -71,14 +70,62 @@
 			author: 'Server Admins',
 			downloads: 1645,
 			rating: 4.8,
-			icon: '🔧',
+			icon: '',
 			category: 'Admin'
+		},
+		{
+			id: '7',
+			name: 'Auction House',
+			description: 'Player-driven marketplace system with bidding functionality',
+			author: 'Community Dev',
+			downloads: 1234,
+			rating: 4.4,
+			icon: '',
+			category: 'Economy'
+		},
+		{
+			id: '8',
+			name: 'Land Protection',
+			description: 'Claim and protect your land with custom regions',
+			author: 'Lunorbis Team',
+			downloads: 2876,
+			rating: 4.7,
+			icon: '',
+			category: 'Protection'
+		},
+		{
+			id: '9',
+			name: 'Pet System',
+			description: 'Tame and customize unique pets with special abilities',
+			author: 'Creator Hub',
+			downloads: 1567,
+			rating: 4.6,
+			icon: '',
+			category: 'Gameplay'
 		}
 	];
 
-	function getStarRating(rating: number) {
-		return '⭐'.repeat(Math.floor(rating)) + (rating % 1 >= 0.5 ? '✨' : '');
+	let currentPage = $state(1);
+	const addonsPerPage = 6;
+
+	let paginatedAddons = $derived(
+		allAddons.slice((currentPage - 1) * addonsPerPage, currentPage * addonsPerPage)
+	);
+
+	let totalPages = $derived(Math.ceil(allAddons.length / addonsPerPage));
+
+	function goToPage(page: number) {
+		if (page >= 1 && page <= totalPages) {
+			currentPage = page;
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
 	}
+
+
+
+	onMount(() => {
+		currentPage = 1;
+	});
 </script>
 
 <svelte:head>
@@ -94,7 +141,6 @@
 	</div>
 
 	<main class="content">
-		<!-- Hero Section -->
 		<section class="hero">
 			<div class="hero-content">
 				<h1 class="page-title">Minecraft Bedrock Add-ons</h1>
@@ -105,41 +151,16 @@
 			</div>
 		</section>
 
-		<!-- Features Overview -->
-		<section class="features-section">
-			<h2 class="section-title">Why Use Lunorbis Add-ons?</h2>
-			<div class="features-grid">
-				<div class="feature-card">
-					<DescriptionBlock icon="⚡" title="High Performance">
-						V8 JIT compilation delivers near-native performance for script execution
-					</DescriptionBlock>
-				</div>
-				<div class="feature-card">
-					<DescriptionBlock icon="📁" title="File System Access">
-						Read and write files directly with extended filesystem APIs
-					</DescriptionBlock>
-				</div>
-				<div class="feature-card">
-					<DescriptionBlock icon="🌐" title="Network Enabled">
-						Make external HTTP requests and connect to external services
-					</DescriptionBlock>
-				</div>
-				<div class="feature-card">
-					<DescriptionBlock icon="🧩" title="Modular Design">
-						Build reusable components and libraries for easier development
-					</DescriptionBlock>
-				</div>
-			</div>
-		</section>
-
-		<!-- Add-ons Showcase -->
 		<section class="addons-section">
-			<h2 class="section-title">Featured Add-ons</h2>
 			<div class="addons-container">
-				{#each addons as addon (addon.id)}
+				{#each paginatedAddons as addon (addon.id)}
 					<div class="addon-card">
 						<div class="addon-header">
-							<div class="addon-icon">{addon.icon}</div>
+							{#if addon.icon}
+								<div class="addon-icon">
+									<img src={addon.icon} alt={addon.name} />
+								</div>
+							{/if}
 							<div class="addon-info">
 								<h3 class="addon-name">{addon.name}</h3>
 								<p class="addon-author">by {addon.author}</p>
@@ -154,11 +175,11 @@
 						<div class="addon-footer">
 							<div class="addon-stats">
 								<div class="stat">
-									<span class="stat-icon">📥</span>
+									<span class="stat-icon">Downloads:</span>
 									<span class="stat-text">{addon.downloads.toLocaleString()}</span>
 								</div>
 								<div class="stat">
-									<span class="stat-icon">{getStarRating(addon.rating)}</span>
+									<span class="stat-icon">Rating:</span>
 									<span class="stat-text">{addon.rating.toFixed(1)}</span>
 								</div>
 							</div>
@@ -167,9 +188,39 @@
 					</div>
 				{/each}
 			</div>
+
+			{#if totalPages > 1}
+				<div class="pagination">
+					<button
+						class="pagination-btn"
+						disabled={currentPage === 1}
+						onclick={() => goToPage(currentPage - 1)}
+					>
+						Previous
+					</button>
+
+					{#each Array(totalPages) as _, i}
+						{@const pageNum = i + 1}
+						<button
+							class="pagination-btn"
+							class:active={currentPage === pageNum}
+							onclick={() => goToPage(pageNum)}
+						>
+							{pageNum}
+						</button>
+					{/each}
+
+					<button
+						class="pagination-btn"
+						disabled={currentPage === totalPages}
+						onclick={() => goToPage(currentPage + 1)}
+					>
+						Next
+					</button>
+				</div>
+			{/if}
 		</section>
 
-		<!-- CTA Section -->
 		<section class="cta-section">
 			<div class="cta-box">
 				<h2>Create Your Own Add-on</h2>
@@ -181,8 +232,6 @@
 			</div>
 		</section>
 	</main>
-
-	<Footer />
 </div>
 
 <style>
@@ -258,11 +307,11 @@
 	}
 
 	.hero {
-		min-height: 40vh;
+		min-height: 30vh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 4rem;
+		margin-bottom: 3rem;
 	}
 
 	.hero-content {
@@ -285,28 +334,6 @@
 		line-height: 1.6;
 	}
 
-	.section-title {
-		text-align: center;
-		font-size: 2rem;
-		color: var(--accent);
-		margin-bottom: 3rem;
-		letter-spacing: 2px;
-	}
-
-	.features-section {
-		margin-bottom: 5rem;
-	}
-
-	.features-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 2rem;
-	}
-
-	.feature-card {
-		min-height: 250px;
-	}
-
 	.addons-section {
 		margin-bottom: 5rem;
 	}
@@ -315,11 +342,11 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 		gap: 2rem;
+		margin-bottom: 3rem;
 	}
 
 	.addon-card {
-		background: rgba(255, 255, 255, 0.02);
-		backdrop-filter: blur(10px);
+		background: rgba(60, 60, 70, 0.4);
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: 15px;
 		padding: 1.5rem;
@@ -330,9 +357,9 @@
 	}
 
 	.addon-card:hover {
-		background: rgba(255, 255, 255, 0.05);
+		background: rgba(70, 70, 80, 0.5);
 		border-color: rgba(0, 255, 207, 0.2);
-		box-shadow: 0 0 30px rgba(0, 255, 207, 0.1);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 		transform: translateY(-3px);
 	}
 
@@ -345,8 +372,18 @@
 	}
 
 	.addon-icon {
-		font-size: 2.5rem;
 		flex-shrink: 0;
+		width: 50px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.addon-icon img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
 	}
 
 	.addon-info {
@@ -412,12 +449,12 @@
 	}
 
 	.stat-icon {
-		display: inline-block;
-		font-size: 1rem;
+		display: inline;
 	}
 
 	.stat-text {
-		display: inline;
+		color: var(--accent);
+		font-weight: bold;
 	}
 
 	.download-button {
@@ -438,17 +475,55 @@
 		box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.5);
 	}
 
+	.pagination {
+		display: flex;
+		justify-content: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		margin-top: 3rem;
+	}
+
+	.pagination-btn {
+		padding: 0.6rem 1rem;
+		background: rgba(60, 60, 70, 0.4);
+		color: #999;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 8px;
+		font-family: 'Monocraft', monospace;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		font-size: 0.9rem;
+	}
+
+	.pagination-btn:hover:not(:disabled) {
+		background: rgba(70, 70, 80, 0.5);
+		color: var(--accent);
+		border-color: rgba(0, 255, 207, 0.3);
+	}
+
+	.pagination-btn.active {
+		background: var(--accent);
+		color: #000;
+		border-color: var(--accent);
+	}
+
+	.pagination-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
 	.cta-section {
 		margin-bottom: 3rem;
 	}
 
 	.cta-box {
-		background: linear-gradient(135deg, rgba(0, 255, 207, 0.08), rgba(0, 255, 207, 0.02));
-		border: 2px solid rgba(0, 255, 207, 0.2);
+		background: rgba(255, 255, 255, 0.03);
+		backdrop-filter: blur(20px) saturate(180%) contrast(70%);
+		-webkit-backdrop-filter: blur(20px) saturate(180%);
+		border: 1px solid rgba(0, 255, 207, 0.2);
 		border-radius: 20px;
 		padding: 3rem;
 		text-align: center;
-		backdrop-filter: blur(10px);
 	}
 
 	.cta-box h2 {
@@ -493,11 +568,7 @@
 
 		.hero {
 			margin-bottom: 2rem;
-			min-height: 30vh;
-		}
-
-		.features-grid {
-			grid-template-columns: 1fr;
+			min-height: 25vh;
 		}
 
 		.addons-container {

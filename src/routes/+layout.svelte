@@ -1,6 +1,7 @@
 <script lang="ts">
 	import './layout.css';
 	import lunorbisLogo from '$lib/assets/lunorbis.svg';
+	import Navbar from '$lib/components/Navbar.svelte';
 
 	let { children } = $props();
 </script>
@@ -11,4 +12,7 @@
 	<meta name="description" content="Lunorbis replaces QuickJS with V8 runtime for Minecraft Bedrock Servers, providing JIT compilation, filesystem access, and external networking." />
 </svelte:head>
 
-{@render children()}
+<Navbar />
+<main class="layout-main">
+	{@render children()}
+</main>
