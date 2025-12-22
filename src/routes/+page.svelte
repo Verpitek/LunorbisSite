@@ -7,6 +7,7 @@
     let currentQuote = "";
     let currentBlockIndex = 1; // Start with middle block (LUNORBIS)
     let direction: 'left' | 'right' = 'right'; // Track animation direction
+    let prevBlockIndex = 1;
 
     const blocks = [
         {
@@ -145,51 +146,20 @@
         "Regex: write once, understand never!",
     ];
 
-    let glassPane: HTMLElement | null = null;
-    let rotateX = 0;
-    let rotateY = 0;
-
     const nextBlock = () => {
+        prevBlockIndex = currentBlockIndex;
         direction = 'right';
         currentBlockIndex = (currentBlockIndex + 1) % blocks.length;
     };
 
     const prevBlock = () => {
+        prevBlockIndex = currentBlockIndex;
         direction = 'left';
         currentBlockIndex = (currentBlockIndex - 1 + blocks.length) % blocks.length;
     };
 
     onMount(() => {
         currentQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        
-        glassPane = document.querySelector('.glass-pane');
-        if (!glassPane) return;
-
-        const handleMouseMove = (e: MouseEvent) => {
-            if (!glassPane) return;
-            const rect = glassPane.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            
-            const distX = (e.clientX - centerX) / (rect.width / 2);
-            const distY = (e.clientY - centerY) / (rect.height / 2);
-            
-            rotateX = Math.max(-1, Math.min(1, distY)) * 8;
-            rotateY = Math.max(-1, Math.min(1, distX)) * -8;
-        };
-
-        const handleMouseLeave = () => {
-            rotateX = 0;
-            rotateY = 0;
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-        glassPane.addEventListener('mouseleave', handleMouseLeave);
-
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            glassPane?.removeEventListener('mouseleave', handleMouseLeave);
-        };
     });
 </script>
 
@@ -204,7 +174,7 @@
         <div class="carousel-container">
             {#each blocks as block, index (index)}
                 <div class="carousel-block" class:active={index === currentBlockIndex} class:dir-left={direction === 'left'} class:dir-right={direction === 'right'}>
-                    <div class="glass-pane {index === currentBlockIndex ? 'active-pane' : ''}" style="transform: perspective(1200px) rotateX({index === currentBlockIndex ? rotateX : 0}deg) rotateY({index === currentBlockIndex ? rotateY : 0}deg);">
+                    <div class="glass-pane">
                         <Glass />
                         
                         <div class="prism-edge"></div>
@@ -350,46 +320,35 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        left: 100%;
         opacity: 0;
         pointer-events: none;
         transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease-in-out;
     }
 
-    /* When moving right: new block comes from right, old goes left */
-    .carousel-section.dir-right .carousel-block {
+    /* Default position: off-screen to the right */
+    .carousel-block {
         left: 100%;
     }
 
-    .carousel-section.dir-right .carousel-block.active {
+    /* Active block is center */
+    .carousel-block.active {
         left: 0;
         opacity: 1;
         pointer-events: auto;
     }
 
+    /* When moving right (next): old block exits left, new block enters from right */
     .carousel-section.dir-right .carousel-block:not(.active) {
         left: -100%;
     }
 
-    /* When moving left: new block comes from left, old goes right */
+    /* When moving left (prev): old block exits right, new block enters from left */
     .carousel-section.dir-left .carousel-block {
         left: -100%;
     }
 
     .carousel-section.dir-left .carousel-block.active {
         left: 0;
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    .carousel-section.dir-left .carousel-block:not(.active) {
-        left: 100%;
-    }
-
-    .carousel-block.active {
-        left: 0;
-        opacity: 1;
-        pointer-events: auto;
     }
 
     /* Navigation buttons */
@@ -476,10 +435,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-
-    .glass-pane.active-pane {
-        transition: transform 0.1s ease-out;
     }
 
     .reflection-glint {
