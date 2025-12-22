@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import InformationBlock from '$lib/components/InformationBlock.svelte';
+	import MatrixBackground from '$lib/components/MatrixBackground.svelte';
 
 	interface Server {
 		id: string;
@@ -131,6 +132,8 @@
 		<div class="crt-vignette"></div>
 		<div class="scanlines"></div>
 	</div>
+
+	<MatrixBackground count={50} />
 
 	<main class="content">
 		<section class="hero">

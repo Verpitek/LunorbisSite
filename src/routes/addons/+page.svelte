@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import MatrixBackground from '$lib/components/MatrixBackground.svelte';
 
 	interface AddOn {
 		id: string;
@@ -139,6 +140,8 @@
 		<div class="crt-vignette"></div>
 		<div class="scanlines"></div>
 	</div>
+
+	<MatrixBackground count={50} />
 
 	<main class="content">
 		<section class="hero">
