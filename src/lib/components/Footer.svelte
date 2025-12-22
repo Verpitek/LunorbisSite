@@ -69,7 +69,7 @@
 
 			<div class="footer-meta">
 				<p class="copyright">
-					&copy; 2024 Lunorbis. All rights reserved.
+					&copy; 2025 Lunorbis. All rights reserved.
 				</p>
 				<p class="tagline">Powering the next generation of Minecraft Bedrock servers.</p>
 			</div>

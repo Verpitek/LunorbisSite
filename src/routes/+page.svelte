@@ -391,33 +391,43 @@
         cursor: pointer;
     }
 
+    /* --- TABLET OVERRIDES --- */
+    @media (max-width: 1024px) {
+        .glass-pane {
+            padding: 4rem 5rem;
+        }
+    }
+
     /* --- MOBILE OVERRIDES --- */
     @media (max-width: 768px) {
         :global(html, body) {
-            overflow-y: auto; /* Allow scrolling on small phones */
+            overflow-y: auto;
         }
 
         .glass-pane {
-            padding: 3rem 1.5rem;
+            padding: 2.5rem 1.5rem;
             border-radius: 20px;
             margin: 1rem;
             width: auto;
         }
 
+        .hero {
+            padding: 0.5rem;
+        }
+
         .hero-title {
-            letter-spacing: 4px;
-            /* clamp is already handling font size well, but we can ensure it stays readable */
+            letter-spacing: 2px;
         }
 
         .splash-text {
-            right: 0; /* Move inward to prevent horizontal overflow */
-            bottom: -50px; /* Move below the title */
+            right: 0;
+            bottom: -50px;
             max-width: 180px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .title-wrapper {
-            margin-bottom: 4.5rem; /* Space for the moved splash text */
+            margin-bottom: 4.5rem;
         }
 
         .hero-subtitle {
@@ -435,12 +445,55 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
+            gap: 0.75rem;
         }
 
         .cta-primary, .cta-secondary {
             width: 100%;
             margin: 0;
-            padding: 1rem;
+            padding: 0.9rem;
+            font-size: 1rem;
+        }
+    }
+
+    /* --- SMALL MOBILE OVERRIDES --- */
+    @media (max-width: 480px) {
+        .glass-pane {
+            padding: 2rem 1.25rem;
+            border-radius: 15px;
+            margin: 0.75rem;
+        }
+
+        .hero {
+            min-height: 80vh;
+            padding: 0.5rem;
+        }
+
+        .hero-title {
+            font-size: clamp(1.75rem, 8vw, 3.5rem);
+            letter-spacing: 1px;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+        }
+
+        .splash-text {
+            max-width: 150px;
+            font-size: 0.75rem;
+            bottom: -45px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            width: 80px;
+            margin-bottom: 0.75rem;
+        }
+
+        .cta-primary, .cta-secondary {
+            padding: 0.75rem;
+            font-size: 0.9rem;
         }
     }
 </style>

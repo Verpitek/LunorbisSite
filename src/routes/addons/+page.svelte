@@ -566,7 +566,7 @@
 
 	@media (max-width: 768px) {
 		.content {
-			padding: 1.5rem 0.75rem;
+			padding: 1.5rem 1rem;
 		}
 
 		.hero {
@@ -574,8 +574,17 @@
 			min-height: 25vh;
 		}
 
+		.page-title {
+			font-size: clamp(1.5rem, 6vw, 3rem);
+		}
+
+		.page-subtitle {
+			font-size: 1rem;
+		}
+
 		.addons-container {
 			grid-template-columns: 1fr;
+			gap: 1.5rem;
 		}
 
 		.cta-box {
@@ -593,6 +602,116 @@
 
 		.addon-category {
 			flex: 1;
+		}
+
+		.addon-card {
+			padding: 1.25rem;
+		}
+
+		.addon-name {
+			font-size: 1.1rem;
+		}
+
+		.addon-footer {
+			flex-direction: column;
+			gap: 1rem;
+			align-items: stretch;
+		}
+
+		.addon-stats {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+
+		.download-button {
+			width: 100%;
+		}
+
+		.pagination {
+			gap: 0.25rem;
+		}
+
+		.pagination-btn {
+			padding: 0.5rem 0.75rem;
+			font-size: 0.8rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.content {
+			padding: 1rem 0.75rem;
+		}
+
+		.hero {
+			min-height: 20vh;
+			margin-bottom: 1.5rem;
+		}
+
+		.page-title {
+			font-size: clamp(1.25rem, 5vw, 2rem);
+			letter-spacing: 1px;
+		}
+
+		.page-subtitle {
+			font-size: 0.9rem;
+		}
+
+		.addons-container {
+			gap: 1rem;
+		}
+
+		.addon-card {
+			padding: 1rem;
+			gap: 0.75rem;
+		}
+
+		.addon-icon {
+			width: 40px;
+			height: 40px;
+		}
+
+		.addon-name {
+			font-size: 1rem;
+		}
+
+		.addon-author {
+			font-size: 0.75rem;
+		}
+
+		.category-badge {
+			font-size: 0.7rem;
+			padding: 0.3rem 0.6rem;
+		}
+
+		.addon-description {
+			font-size: 0.85rem;
+		}
+
+		.stat {
+			font-size: 0.8rem;
+		}
+
+		.download-button {
+			padding: 0.5rem 1rem;
+			font-size: 0.8rem;
+		}
+
+		.cta-box {
+			padding: 1.5rem;
+		}
+
+		.cta-box h2 {
+			font-size: 1.25rem;
+			margin-bottom: 0.75rem;
+		}
+
+		.cta-box p {
+			font-size: 0.95rem;
+		}
+
+		.cta-button {
+			padding: 0.8rem 2rem;
+			font-size: 0.9rem;
 		}
 	}
 </style>

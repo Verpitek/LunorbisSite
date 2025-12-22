@@ -150,10 +150,21 @@
 		border-color: rgba(88, 101, 242, 0.5);
 	}
 
+	@media (max-width: 1024px) {
+		.navbar-content {
+			padding: 0.75rem 1.5rem;
+		}
+	}
+
 	@media (max-width: 768px) {
+		.navbar {
+			padding: 0;
+		}
+
 		.navbar-content {
 			padding: 0.75rem 1rem;
 			gap: 1rem;
+			flex-wrap: wrap;
 		}
 
 		.brand-logo {
@@ -162,11 +173,20 @@
 		}
 
 		.brand-name {
-			font-size: 1rem;
+			font-size: 0.95rem;
+			letter-spacing: 1px;
 		}
 
 		.navbar-menu {
 			gap: 1rem;
+			font-size: 0.85rem;
+			flex: 1;
+			min-width: 100%;
+			order: 3;
+			justify-content: flex-start;
+		}
+
+		.navbar-menu a {
 			font-size: 0.85rem;
 		}
 
@@ -177,12 +197,33 @@
 	}
 
 	@media (max-width: 480px) {
-		.navbar-menu {
+		.navbar-content {
+			padding: 0.6rem 0.75rem;
 			gap: 0.75rem;
 		}
 
+		.brand-logo {
+			width: 28px;
+			height: 28px;
+		}
+
+		.brand-name {
+			font-size: 0.85rem;
+			letter-spacing: 0.5px;
+		}
+
+		.navbar-menu {
+			gap: 0.5rem;
+			font-size: 0.75rem;
+		}
+
 		.navbar-menu a {
-			font-size: 0.8rem;
+			font-size: 0.75rem;
+		}
+
+		.discord-link {
+			padding: 0.4rem 0.8rem;
+			font-size: 0.7rem;
 		}
 	}
 </style>

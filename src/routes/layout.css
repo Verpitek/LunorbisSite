@@ -101,5 +101,11 @@ body::after {
 }
 
 :global(.layout-main) {
-	margin-top: 70px;
+	margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+	:global(.layout-main) {
+		margin-top: 70px;
+	}
 }

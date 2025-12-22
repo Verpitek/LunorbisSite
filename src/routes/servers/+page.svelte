@@ -413,7 +413,7 @@
 
 	@media (max-width: 768px) {
 		.content {
-			padding: 1.5rem 0.75rem;
+			padding: 1.5rem 1rem;
 		}
 
 		.hero {
@@ -421,8 +421,59 @@
 			min-height: 25vh;
 		}
 
+		.page-title {
+			font-size: clamp(1.5rem, 6vw, 3rem);
+		}
+
+		.page-subtitle {
+			font-size: 1rem;
+		}
+
 		.servers-container {
 			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+
+		.pagination {
+			gap: 0.25rem;
+		}
+
+		.pagination-btn {
+			padding: 0.5rem 0.75rem;
+			font-size: 0.8rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.content {
+			padding: 1rem 0.75rem;
+		}
+
+		.hero {
+			min-height: 20vh;
+			margin-bottom: 1.5rem;
+		}
+
+		.page-title {
+			font-size: clamp(1.25rem, 5vw, 2rem);
+			letter-spacing: 1px;
+		}
+
+		.page-subtitle {
+			font-size: 0.9rem;
+		}
+
+		.servers-container {
+			gap: 1rem;
+		}
+
+		.server-card {
+			min-height: auto;
+		}
+
+		.connect-button {
+			padding: 0.6rem;
+			font-size: 0.85rem;
 		}
 	}
 </style>
