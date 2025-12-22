@@ -119,38 +119,16 @@ body::after {
 	}
 }
 
-@keyframes particle-burst {
-	0% {
-		opacity: 1;
-		transform: translate(0, 0) rotateX(var(--rotX)) rotateY(var(--rotY)) rotateZ(var(--rotZ)) scale(1);
-	}
-	100% {
-		opacity: 0;
-		transform: translate(calc(var(--vx) * var(--distance)), calc(var(--vy) * var(--distance))) rotateX(var(--rotX)) rotateY(var(--rotY)) rotateZ(var(--rotZ)) scale(0.2);
-	}
-}
 
-.particle {
-	position: fixed;
-	pointer-events: none;
-	color: #00ffcf;
-	font-family: 'Monocraft', monospace;
-	font-weight: bold;
-	font-size: 1.5rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 2rem;
-	height: 2rem;
-	text-shadow: 0 0 8px #00ffcf;
-	animation: particle-burst var(--duration) ease-out forwards;
-	z-index: 999;
-	perspective: 1000px;
-	transform-style: preserve-3d;
-}
 
 @media (max-width: 768px) {
 	:global(.layout-main) {
-		margin-top: 70px;
+		margin-top: 120px;
+	}
+}
+
+@media (max-width: 480px) {
+	:global(.layout-main) {
+		margin-top: 140px;
 	}
 }
