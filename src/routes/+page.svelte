@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import lunorbisLogo from "$lib/assets/lunorbis.svg";
+    import Footer from "$lib/components/Footer.svelte";
 
     let matrixChars = "01";
     let currentQuote = "";
@@ -154,6 +155,8 @@
         </div>
     </section>
 </div>
+
+<Footer />
 
 <style>
     :root {
