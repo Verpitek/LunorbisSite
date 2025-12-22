@@ -316,6 +316,9 @@
 
 	.hero-content {
 		text-align: center;
+		width: 100%;
+		max-width: 900px;
+		padding: 0 1rem;
 	}
 
 	.page-title {
@@ -329,8 +332,8 @@
 	.page-subtitle {
 		font-size: 1.2rem;
 		color: #999;
-		max-width: 700px;
-		margin: 0;
+		max-width: 800px;
+		margin: 0 auto;
 		line-height: 1.6;
 	}
 

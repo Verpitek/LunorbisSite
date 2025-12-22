@@ -23,9 +23,6 @@
 			<li>
 				<a href="/addons" class:active={currentPath === '/addons'}>Add-ons</a>
 			</li>
-			<li>
-				<a href="/github" class:active={currentPath === '/github'}>GitHub</a>
-			</li>
 		</ul>
 
 		<div class="navbar-end">
