@@ -203,8 +203,8 @@
     <section class="hero carousel-section dir-{direction}" data-collision-box>
         <div class="carousel-container">
             {#each blocks as block, index (index)}
-                <div class="carousel-block" class:active={index === currentBlockIndex}>
-                    <div class="glass-pane" style="transform: perspective(1200px) rotateX({index === currentBlockIndex ? rotateX : 0}deg) rotateY({index === currentBlockIndex ? rotateY : 0}deg); transition: transform 0.1s ease-out;">
+                <div class="carousel-block" class:active={index === currentBlockIndex} class:dir-left={direction === 'left'} class:dir-right={direction === 'right'}>
+                    <div class="glass-pane {index === currentBlockIndex ? 'active-pane' : ''}" style="transform: perspective(1200px) rotateX({index === currentBlockIndex ? rotateX : 0}deg) rotateY({index === currentBlockIndex ? rotateY : 0}deg);">
                         <Glass />
                         
                         <div class="prism-edge"></div>
@@ -352,26 +352,44 @@
         justify-content: center;
         left: 100%;
         opacity: 0;
-        transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease-in-out;
         pointer-events: none;
+        transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease-in-out;
+    }
+
+    /* When moving right: new block comes from right, old goes left */
+    .carousel-section.dir-right .carousel-block {
+        left: 100%;
+    }
+
+    .carousel-section.dir-right .carousel-block.active {
+        left: 0;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .carousel-section.dir-right .carousel-block:not(.active) {
+        left: -100%;
+    }
+
+    /* When moving left: new block comes from left, old goes right */
+    .carousel-section.dir-left .carousel-block {
+        left: -100%;
+    }
+
+    .carousel-section.dir-left .carousel-block.active {
+        left: 0;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .carousel-section.dir-left .carousel-block:not(.active) {
+        left: 100%;
     }
 
     .carousel-block.active {
         left: 0;
         opacity: 1;
         pointer-events: auto;
-    }
-
-    .carousel-block:nth-child(1).active {
-        left: 0;
-    }
-
-    .carousel-block:nth-child(2).active {
-        left: 0;
-    }
-
-    .carousel-block:nth-child(3).active {
-        left: 0;
     }
 
     /* Navigation buttons */
@@ -458,6 +476,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .glass-pane.active-pane {
+        transition: transform 0.1s ease-out;
     }
 
     .reflection-glint {
