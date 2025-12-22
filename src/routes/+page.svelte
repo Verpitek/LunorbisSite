@@ -5,30 +5,6 @@
     import Glass from "$lib/components/Glass.svelte";
 
     let currentQuote = "";
-    let currentBlockIndex = 1; // Start with middle block (LUNORBIS)
-    let direction: 'left' | 'right' = 'right'; // Track animation direction
-    let prevBlockIndex = 1;
-
-    const blocks = [
-        {
-            title: "COMMUNITY",
-            subtitle: "Join thousands of developers",
-            buttonPrimary: "Join Now",
-            buttonSecondary: "Discord"
-        },
-        {
-            title: "LUNORBIS",
-            subtitle: "High-Performance Bedrock Server Runtime",
-            buttonPrimary: "Install Now!",
-            buttonSecondary: "Docs"
-        },
-        {
-            title: "FEATURES",
-            subtitle: "Lightning-fast performance and stability",
-            buttonPrimary: "Learn More",
-            buttonSecondary: "API Docs"
-        }
-    ];
 
     const quotes = [
         // JavaScript Classics
@@ -146,18 +122,6 @@
         "Regex: write once, understand never!",
     ];
 
-    const nextBlock = () => {
-        prevBlockIndex = currentBlockIndex;
-        direction = 'right';
-        currentBlockIndex = (currentBlockIndex + 1) % blocks.length;
-    };
-
-    const prevBlock = () => {
-        prevBlockIndex = currentBlockIndex;
-        direction = 'left';
-        currentBlockIndex = (currentBlockIndex - 1 + blocks.length) % blocks.length;
-    };
-
     onMount(() => {
         currentQuote = quotes[Math.floor(Math.random() * quotes.length)];
     });
@@ -170,53 +134,65 @@
 
     <MatrixBackground count={25} />
 
-    <section class="hero carousel-section dir-{direction}" data-collision-box>
-        <div class="carousel-container">
-            {#each blocks as block, index (index)}
-                <div class="carousel-block" class:active={index === currentBlockIndex} class:dir-left={direction === 'left'} class:dir-right={direction === 'right'}>
-                    <div class="glass-pane">
-                        <Glass />
-                        
-                        <div class="prism-edge"></div>
-        
-                        <div class="glass-content">
-                            <div class="logo-container">
-                                <img src={lunorbisLogo} alt="Logo" class="logo" />
-                            </div>
-        
-                            <div class="title-wrapper">
-                                <h1 class="hero-title">{block.title}</h1>
-                                {#if currentQuote && index === 1}
-                                    <div class="splash-text">{currentQuote}</div>
-                                {/if}
-                            </div>
-        
-                            <p class="hero-subtitle">{block.subtitle}</p>
-        
-                            <div class="cta-buttons">
-                                <button class="cta-primary">{block.buttonPrimary}</button>
-                                <button class="cta-secondary">{block.buttonSecondary}</button>
-                            </div>
+    <section class="hero" data-collision-box>
+        <div class="glass-pane">
+            <Glass />
+            
+            <div class="prism-edge"></div>
+
+            <div class="glass-content">
+                <div class="logo-container">
+                    <img src={lunorbisLogo} alt="Logo" class="logo" />
+                </div>
+
+                <div class="title-wrapper">
+                    <h1 class="hero-title">LUNORBIS</h1>
+                    {#if currentQuote}
+                        <div class="splash-text">{currentQuote}</div>
+                    {/if}
+                </div>
+
+                <p class="hero-subtitle">High-Performance Bedrock Server Runtime</p>
+
+                <div class="cta-buttons">
+                    <button class="cta-primary">Install Now!</button>
+                    <button class="cta-secondary">Docs</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="blocks-section">
+        <div class="blocks-grid">
+            <div class="block-card">
+                <div class="glass-pane">
+                    <Glass />
+                    <div class="prism-edge"></div>
+                    <div class="glass-content">
+                        <h2 class="block-title">FEATURES</h2>
+                        <p class="block-subtitle">Lightning-fast performance and stability</p>
+                        <div class="cta-buttons">
+                            <button class="cta-primary">Learn More</button>
+                            <button class="cta-secondary">API Docs</button>
                         </div>
                     </div>
                 </div>
-            {/each}
-        </div>
+            </div>
 
-        <!-- Carousel Navigation -->
-        <button class="carousel-nav carousel-prev" on:click={prevBlock}>←</button>
-        <button class="carousel-nav carousel-next" on:click={nextBlock}>→</button>
-
-        <!-- Carousel Indicators -->
-        <div class="carousel-indicators">
-            {#each blocks as _, index}
-                <button 
-                    class="indicator" 
-                    class:active={index === currentBlockIndex}
-                    on:click={() => currentBlockIndex = index}
-                    aria-label="Go to block {index + 1}"
-                ></button>
-            {/each}
+            <div class="block-card">
+                <div class="glass-pane">
+                    <Glass />
+                    <div class="prism-edge"></div>
+                    <div class="glass-content">
+                        <h2 class="block-title">COMMUNITY</h2>
+                        <p class="block-subtitle">Join thousands of developers</p>
+                        <div class="cta-buttons">
+                            <button class="cta-primary">Join Now</button>
+                            <button class="cta-secondary">Discord</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>
@@ -301,118 +277,39 @@
         padding: 1rem;
     }
 
-    .carousel-section {
-        overflow: hidden;
+    .blocks-section {
         position: relative;
+        z-index: 10;
+        padding: 4rem 1rem;
+        background: var(--bg-deep);
     }
 
-    .carousel-container {
+    .blocks-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .block-card {
         display: flex;
-        position: relative;
-        width: 100%;
-        height: 100%;
+        align-items: stretch;
     }
 
-    .carousel-block {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease-in-out;
-    }
-
-    /* Default position: off-screen to the right */
-    .carousel-block {
-        left: 100%;
-    }
-
-    /* Active block is center */
-    .carousel-block.active {
-        left: 0;
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    /* When moving right (next): old block exits left, new block enters from right */
-    .carousel-section.dir-right .carousel-block:not(.active) {
-        left: -100%;
-    }
-
-    /* When moving left (prev): old block exits right, new block enters from left */
-    .carousel-section.dir-left .carousel-block {
-        left: -100%;
-    }
-
-    .carousel-section.dir-left .carousel-block.active {
-        left: 0;
-    }
-
-    /* Navigation buttons */
-    .carousel-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 30;
-        background: rgba(0, 255, 207, 0.2);
-        border: 2px solid rgba(0, 255, 207, 0.5);
+    .block-title {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        margin: 0 0 1rem 0;
         color: var(--accent);
-        font-size: 1.5rem;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: "Monocraft", monospace;
-        font-weight: bold;
+        letter-spacing: 5px;
     }
 
-    .carousel-nav:hover {
-        background: rgba(0, 255, 207, 0.4);
-        border-color: var(--accent);
-        box-shadow: 0 0 20px rgba(0, 255, 207, 0.5);
-    }
-
-    .carousel-prev {
-        left: 2rem;
-    }
-
-    .carousel-next {
-        right: 2rem;
-    }
-
-    /* Carousel indicators */
-    .carousel-indicators {
-        position: absolute;
-        bottom: 2rem;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 1rem;
-        z-index: 30;
-    }
-
-    .indicator {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        border: 2px solid rgba(0, 255, 207, 0.5);
-        background: transparent;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .indicator.active {
-        background: var(--accent);
-        box-shadow: 0 0 15px rgba(0, 255, 207, 0.6);
-    }
-
-    .indicator:hover {
-        border-color: var(--accent);
-        box-shadow: 0 0 10px rgba(0, 255, 207, 0.3);
+    .block-subtitle {
+        color: #aaa;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+        letter-spacing: 1px;
     }
 
     .glass-pane {
