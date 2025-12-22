@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 </script>
 
-<nav class="navbar">
+<nav class="navbar" data-collision-box>
 	<div class="navbar-content">
 		<div class="navbar-brand">
 			<a href="/" class="brand-link">
@@ -15,12 +15,6 @@
 		<ul class="navbar-menu">
 			<li>
 				<a href="/" class:active={$page.url.pathname === '/'}>Home</a>
-			</li>
-			<li>
-				<a href="/servers" class:active={$page.url.pathname === '/servers'}>Servers</a>
-			</li>
-			<li>
-				<a href="/addons" class:active={$page.url.pathname === '/addons'}>Add-ons</a>
 			</li>
 		</ul>
 

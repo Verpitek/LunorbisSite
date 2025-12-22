@@ -3,7 +3,7 @@
     import lunorbisLogo from "$lib/assets/lunorbis.svg";
     import MatrixBackground from "$lib/components/MatrixBackground.svelte";
     import TVTurnOnEffect from "$lib/components/TVTurnOnEffect.svelte";
-    
+    import Glass from "$lib/components/Glass.svelte";
 
     let currentQuote = "";
 
@@ -26,7 +26,7 @@
         "V8 Runtime: Because QuickJS was too slow for my cat",
         "JSON is my love language.",
         "System.ready(but-not-really)",
-        
+
         // More JavaScript Quirks
         "typeof NaN === 'number'... true!",
         "[] + {} = '[object Object]'",
@@ -130,42 +130,40 @@
 
 <div class="page terminal-theme">
     <TVTurnOnEffect />
-    
+
     <div class="moving-stripes"></div>
     <div class="crt-vignette"></div>
     <div class="scanlines"></div>
 
     <MatrixBackground count={25} />
 
-    <section class="hero">
-        <div class="glass-pane">
-            <div class="reflection-glint"></div>
-
-            <div class="glass-content">
-                <div class="logo-container">
-                    <img src={lunorbisLogo} alt="Logo" class="logo" />
-                </div>
-
-                <div class="title-wrapper">
-                    <h1 class="hero-title">LUNORBIS</h1>
-                    {#if currentQuote}
-                        <div class="splash-text">
-                            {currentQuote}
-                        </div>
-                    {/if}
-                </div>
-
-                <p class="hero-subtitle">
-                    High-Performance Bedrock Server Runtime
-                </p>
-
-                <div class="cta-buttons">
-                    <button class="cta-primary">Install Now!</button>
-                    <button class="cta-secondary">Docs</button>
+    <section class="hero" data-collision-box>
+            <div class="glass-pane">
+                <Glass />
+                
+                <div class="prism-edge"></div>
+    
+                <div class="glass-content">
+                    <div class="logo-container">
+                        <img src={lunorbisLogo} alt="Logo" class="logo" />
+                    </div>
+    
+                    <div class="title-wrapper">
+                        <h1 class="hero-title">LUNORBIS</h1>
+                        {#if currentQuote}
+                            <div class="splash-text">{currentQuote}</div>
+                        {/if}
+                    </div>
+    
+                    <p class="hero-subtitle">High-Performance Bedrock Server Runtime</p>
+    
+                    <div class="cta-buttons">
+                        <button class="cta-primary">Install Now!</button>
+                        <button class="cta-secondary">Docs</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 </div>
 
 <style>
@@ -186,6 +184,54 @@
         /* Changed overflow to allow vertical scrolling on small heights */
         overflow-x: hidden;
         width: 100%;
+    }
+
+    .glass-pane {
+        position: relative;
+        /* We use a very low opacity background because the WebGL handles the "glass" look */
+        background: rgba(255, 255, 255, 0.01);
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px);
+
+        /* The border is crucial for the "Refraction" look */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 2px solid rgba(0, 255, 207, 0.3); /* Cyan highlight on top */
+
+        border-radius: 40px;
+        padding: 5rem 7rem;
+        overflow: hidden;
+        box-shadow:
+            0 50px 100px rgba(0, 0, 0, 0.9),
+            inset 0 0 80px rgba(0, 255, 207, 0.05); /* Internal glow */
+        max-width: 900px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* This adds a rainbow "prism" effect to the edge of the glass */
+    .prism-edge {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border: 2px solid transparent;
+        background: linear-gradient(
+                135deg,
+                rgba(255, 0, 0, 0.1),
+                rgba(0, 255, 255, 0.1),
+                rgba(0, 0, 255, 0.1)
+            )
+            border-box;
+        -webkit-mask:
+            linear-gradient(#fff 0 0) padding-box,
+            linear-gradient(#fff 0 0);
+        mask:
+            linear-gradient(#fff 0 0) padding-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: destination-out;
+        mask-composite: exclude;
+        opacity: 0.5;
     }
 
     .moving-stripes {
@@ -211,8 +257,6 @@
             background-position: 84.85px 84.85px;
         }
     }
-
-
 
     .hero {
         position: relative;
@@ -262,9 +306,15 @@
     }
 
     @keyframes glint-sweep {
-        0% { left: -150%; }
-        20% { left: 150%; }
-        100% { left: 150%; }
+        0% {
+            left: -150%;
+        }
+        20% {
+            left: 150%;
+        }
+        100% {
+            left: 150%;
+        }
     }
 
     .glass-content {
@@ -290,8 +340,8 @@
 
     .splash-text {
         position: absolute;
-        right: -70px; 
-        bottom: -15px; 
+        right: -70px;
+        bottom: -15px;
         color: var(--minecraft-yellow);
         font-size: clamp(0.7rem, 1.8vw, 1.25rem);
         transform: rotate(-20deg);
@@ -305,14 +355,22 @@
     }
 
     @keyframes splash-pulse {
-        from { transform: rotate(-20deg) scale(0.95); }
-        to { transform: rotate(-20deg) scale(1.1); }
+        from {
+            transform: rotate(-20deg) scale(0.95);
+        }
+        to {
+            transform: rotate(-20deg) scale(1.1);
+        }
     }
 
     .crt-vignette {
         position: fixed;
         inset: 0;
-        background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.95) 100%);
+        background: radial-gradient(
+            circle,
+            transparent 40%,
+            rgba(0, 0, 0, 0.95) 100%
+        );
         pointer-events: none;
         z-index: 100;
     }
@@ -320,7 +378,11 @@
     .scanlines {
         position: fixed;
         inset: 0;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 50%, transparent 50%);
+        background: linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.02) 50%,
+            transparent 50%
+        );
         background-size: 100% 4px;
         pointer-events: none;
         z-index: 101;
@@ -354,7 +416,9 @@
         font-weight: bold;
         font-size: 1.1rem;
         cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
     }
 
     .cta-primary:hover {
@@ -428,7 +492,8 @@
             gap: 0.75rem;
         }
 
-        .cta-primary, .cta-secondary {
+        .cta-primary,
+        .cta-secondary {
             width: 100%;
             margin: 0;
             padding: 0.9rem;
@@ -471,7 +536,8 @@
             margin-bottom: 0.75rem;
         }
 
-        .cta-primary, .cta-secondary {
+        .cta-primary,
+        .cta-secondary {
             padding: 0.75rem;
             font-size: 0.9rem;
         }
