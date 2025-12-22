@@ -1,7 +1,6 @@
 <script lang="ts">
 	import lunorbisLogo from '$lib/assets/lunorbis.svg';
-
-	let { currentPath = '/' } = $props();
+	import { page } from '$app/stores';
 </script>
 
 <nav class="navbar">
@@ -15,13 +14,13 @@
 
 		<ul class="navbar-menu">
 			<li>
-				<a href="/" class:active={currentPath === '/'}>Home</a>
+				<a href="/" class:active={$page.url.pathname === '/'}>Home</a>
 			</li>
 			<li>
-				<a href="/servers" class:active={currentPath === '/servers'}>Servers</a>
+				<a href="/servers" class:active={$page.url.pathname === '/servers'}>Servers</a>
 			</li>
 			<li>
-				<a href="/addons" class:active={currentPath === '/addons'}>Add-ons</a>
+				<a href="/addons" class:active={$page.url.pathname === '/addons'}>Add-ons</a>
 			</li>
 		</ul>
 
@@ -45,7 +44,7 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		z-index: 1000;
+		z-index: 999;
 		background: rgba(255, 255, 255, 0.03);
 		backdrop-filter: blur(20px) saturate(180%) contrast(70%);
 		-webkit-backdrop-filter: blur(20px) saturate(180%);
