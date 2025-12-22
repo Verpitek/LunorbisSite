@@ -5,9 +5,16 @@
     import Glass from "$lib/components/Glass.svelte";
 
     let currentQuote = "";
-    let currentBlockIndex = 0;
+    let currentBlockIndex = 1; // Start with middle block (LUNORBIS)
+    let direction: 'left' | 'right' = 'right'; // Track animation direction
 
     const blocks = [
+        {
+            title: "COMMUNITY",
+            subtitle: "Join thousands of developers",
+            buttonPrimary: "Join Now",
+            buttonSecondary: "Discord"
+        },
         {
             title: "LUNORBIS",
             subtitle: "High-Performance Bedrock Server Runtime",
@@ -19,12 +26,6 @@
             subtitle: "Lightning-fast performance and stability",
             buttonPrimary: "Learn More",
             buttonSecondary: "API Docs"
-        },
-        {
-            title: "COMMUNITY",
-            subtitle: "Join thousands of developers",
-            buttonPrimary: "Join Now",
-            buttonSecondary: "Discord"
         }
     ];
 
@@ -149,10 +150,12 @@
     let rotateY = 0;
 
     const nextBlock = () => {
+        direction = 'right';
         currentBlockIndex = (currentBlockIndex + 1) % blocks.length;
     };
 
     const prevBlock = () => {
+        direction = 'left';
         currentBlockIndex = (currentBlockIndex - 1 + blocks.length) % blocks.length;
     };
 
@@ -197,7 +200,7 @@
 
     <MatrixBackground count={25} />
 
-    <section class="hero carousel-section" data-collision-box>
+    <section class="hero carousel-section dir-{direction}" data-collision-box>
         <div class="carousel-container">
             {#each blocks as block, index (index)}
                 <div class="carousel-block" class:active={index === currentBlockIndex}>
@@ -213,7 +216,7 @@
         
                             <div class="title-wrapper">
                                 <h1 class="hero-title">{block.title}</h1>
-                                {#if currentQuote && index === 0}
+                                {#if currentQuote && index === 1}
                                     <div class="splash-text">{currentQuote}</div>
                                 {/if}
                             </div>
