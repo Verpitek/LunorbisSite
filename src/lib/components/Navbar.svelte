@@ -46,10 +46,12 @@
 		right: 0;
 		z-index: 999;
 		background: rgba(255, 255, 255, 0.03);
-		backdrop-filter: blur(20px) saturate(180%) contrast(70%);
-		-webkit-backdrop-filter: blur(20px) saturate(180%);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+		backdrop-filter: blur(35px) saturate(200%) contrast(90%);
+		-webkit-backdrop-filter: blur(35px) saturate(200%);
+		border-right: 1px solid rgba(0, 0, 0, 0.3);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 		padding: 0;
+		box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(255, 255, 255, 0.02);
 	}
 
 	.navbar-content {
@@ -105,7 +107,7 @@
 		text-decoration: none;
 		font-size: 0.95rem;
 		letter-spacing: 0.5px;
-		transition: color 0.2s ease;
+		transition: color 0.3s ease;
 		position: relative;
 	}
 
@@ -125,6 +127,20 @@
 		right: 0;
 		height: 2px;
 		background: var(--accent);
+		animation: underline-expand 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	@keyframes underline-expand {
+		from {
+			left: 50%;
+			right: 50%;
+			opacity: 0;
+		}
+		to {
+			left: 0;
+			right: 0;
+			opacity: 1;
+		}
 	}
 
 	.navbar-end {

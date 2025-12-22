@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import lunorbisLogo from "$lib/assets/lunorbis.svg";
     import MatrixBackground from "$lib/components/MatrixBackground.svelte";
+    import TVTurnOnEffect from "$lib/components/TVTurnOnEffect.svelte";
     
 
     let currentQuote = "";
@@ -128,6 +129,8 @@
 </script>
 
 <div class="page terminal-theme">
+    <TVTurnOnEffect />
+    
     <div class="moving-stripes"></div>
     <div class="crt-vignette"></div>
     <div class="scanlines"></div>
@@ -157,7 +160,7 @@
                 </p>
 
                 <div class="cta-buttons">
-                    <button class="cta-primary">Launch Project</button>
+                    <button class="cta-primary">Install Now!</button>
                     <button class="cta-secondary">Docs</button>
                 </div>
             </div>
@@ -268,6 +271,7 @@
         position: relative;
         z-index: 2;
         text-align: center;
+        user-select: none;
     }
 
     .title-wrapper {
