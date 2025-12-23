@@ -333,8 +333,8 @@
     .glass-pane {
         position: relative;
         background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(35px) saturate(200%) contrast(90%);
-        -webkit-backdrop-filter: blur(35px) saturate(200%);
+        backdrop-filter: blur(0px) saturate(200%) contrast(90%);
+        -webkit-backdrop-filter: blur(0px) saturate(200%);
         border-top: 2px solid rgba(255, 255, 255, 0.2);
         border-left: 2px solid rgba(255, 255, 255, 0.15);
         border-right: 1px solid rgba(0, 0, 0, 0.3);
@@ -356,17 +356,26 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        animation: undissolve 3s ease-out forwards;
+         animation: undissolve 3s ease-out forwards, glass-blur-in 1s ease-out 3s forwards;
     }
 
     @keyframes undissolve {
         0% {
             opacity: 0;
-            filter: blur(20px);
         }
         100% {
             opacity: 1;
-            filter: blur(0);
+        }
+    }
+
+    @keyframes glass-blur-in {
+        0% {
+            backdrop-filter: blur(0px) saturate(200%) contrast(90%);
+            -webkit-backdrop-filter: blur(0px) saturate(200%);
+        }
+        100% {
+            backdrop-filter: blur(35px) saturate(200%) contrast(90%);
+            -webkit-backdrop-filter: blur(35px) saturate(200%);
         }
     }
 
